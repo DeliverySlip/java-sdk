@@ -53,3 +53,7 @@ fabric.properties
 build
 
 src/test/resources/*.properties
+
+# Confirmation required
+LICENSE.md
+CONTRIBUTING.md
