@@ -36,7 +36,23 @@ gradle command
 The outputted javadoc files will be located in `build/docs`
 
 # Testing
-If you would like to run unit tests on the SDK, execute them with the following command:
+If you would like to run unit tests on the SDK, create a `unittest.properties` file within the
+`src/test/resources` folder and enter the following information:
+```
+servicecode=<serviceocde>
+username=<email>
+password=<password>
+recipientemail=<recipientemail>
+```
+The servicecode is the unique code representing your portal. You can find this by logging into your account at
+[https://w.deliveryslip.com](https://w.deliveryslip.com). Once you have logged in, copy the service code that will
+have been appended onto the url after you have completed logging in. For additional help, contact support or your
+portal admin.
+The username and password are then the login credentials you use to access your secure email account. Add a recipient
+email so that the mailing tests know where to send, this could be your same email if you would like, or another
+email already part of the same portal.
+
+To then execute the tests, from the project root, execute the following command:
 ```$xslt
 ./gradlew.bat test      #windows
 ./gradlew test          # *nix
