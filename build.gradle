@@ -1,0 +1,74 @@
+group 'securemessaging'
+version '3.2.0'
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.1"
+    }
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+
+//make sure the source is compatible with java6 + make sure the target compiled code is compatible with java 6
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+repositories {
+    mavenCentral()
+}
+
+shadowJar {
+    //configurations = [project.configurations.compile]
+
+    classifier = null
+    baseName = "deliveryslipclient"
+
+    manifest {
+        attributes 'Implementation-Version': version
+    }
+}
+
+dependencies {
+
+    testCompileOnly(
+            'junit:junit:4.12'
+    )
+    testImplementation(
+            'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    )
+    testRuntimeOnly(
+            'org.junit.jupiter:junit-jupiter-engine:5.1.0',
+            'org.junit.vintage:junit-vintage-engine:5.1.0'
+    )
+
+
+    compile "com.fasterxml.jackson.core:jackson-databind:2.6.7"
+
+    compile group: 'org.springframework', name: 'spring-web', version: '4.3.11.RELEASE'
+    compile group: 'org.springframework', name: 'spring-core', version: '4.3.11.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context', version: '4.3.11.RELEASE'
+
+    compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
+
+    compile 'com.pusher:pusher-java-client:1.8.0'
+
+    compile 'org.projectlombok:lombok:1.16.16'
+}
+
+test {
+    useJUnitPlatform()
+}
+
