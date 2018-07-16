@@ -1,8 +1,8 @@
-import com.securemessaging.javamessenger.SecureMessenger;
-import com.securemessaging.javamessenger.ex.SecureMessengerClientException;
-import com.securemessaging.javamessenger.ex.SecureMessengerException;
-import com.securemessaging.javamessenger.sm.Credentials;
-import com.securemessaging.javamessenger.utils.BuildVersion;
+import com.securemessaging.SecureMessenger;
+import com.securemessaging.ex.SecureMessengerClientException;
+import com.securemessaging.ex.SecureMessengerException;
+import com.securemessaging.sm.Credentials;
+import com.securemessaging.utils.BuildVersion;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

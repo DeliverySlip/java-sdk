@@ -1,4 +1,4 @@
-import com.securemessaging.javamessenger.sm.auth.ServiceCodeResolver;
+import com.securemessaging.sm.auth.ServiceCodeResolver;
 
 import org.junit.BeforeClass;
 import org.junit.Rule;

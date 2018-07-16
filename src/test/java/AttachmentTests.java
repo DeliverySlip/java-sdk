@@ -1,11 +1,11 @@
-import com.securemessaging.javamessenger.SecureMessenger;
-import com.securemessaging.javamessenger.ex.SecureMessengerClientException;
-import com.securemessaging.javamessenger.ex.SecureMessengerException;
-import com.securemessaging.javamessenger.sm.Credentials;
-import com.securemessaging.javamessenger.sm.Message;
-import com.securemessaging.javamessenger.sm.attachments.AttachmentManager;
-import com.securemessaging.javamessenger.sm.attachments.AttachmentPlaceholder;
-import com.securemessaging.javamessenger.sm.enums.BodyFormat;
+import com.securemessaging.SecureMessenger;
+import com.securemessaging.ex.SecureMessengerClientException;
+import com.securemessaging.ex.SecureMessengerException;
+import com.securemessaging.sm.Credentials;
+import com.securemessaging.sm.Message;
+import com.securemessaging.sm.attachments.AttachmentManager;
+import com.securemessaging.sm.attachments.AttachmentPlaceholder;
+import com.securemessaging.sm.enums.BodyFormat;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
