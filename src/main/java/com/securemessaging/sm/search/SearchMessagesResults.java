@@ -110,24 +110,12 @@ public class SearchMessagesResults implements Iterable<Message>, Collection<Mess
             localMessageStore.addAll(messages);
 
         }catch(SecureMessengerClientException smce){
-            //smce.printStackTrace();
-
-            //this.buffer.clear();
-            //this.itemIndex = this.totalItems;
-            //this.hasError = true;
-            //this.error = smce;
 
             NoSuchElementException nsee = new NoSuchElementException();
             nsee.setStackTrace(smce.getStackTrace());
             throw nsee;
 
         }catch(SecureMessengerException sme){
-            //sme.printStackTrace();
-
-            //this.buffer.clear();
-            //this.itemIndex = this.totalItems;
-            //this.hasError = true;
-            //this.error = sme;
 
             NoSuchElementException nsee = new NoSuchElementException();
             nsee.setStackTrace(sme.getStackTrace());

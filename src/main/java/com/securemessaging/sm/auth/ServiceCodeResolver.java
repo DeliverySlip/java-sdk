@@ -6,6 +6,10 @@ import com.securemessaging.client.ClientRequestHandler;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 
+/**
+ * ServiceCodeResolver is a helper class that resolves service codes to their appropriate secure messaging api
+ * endpoint using the CCC API
+ */
 public class ServiceCodeResolver {
 
     private static String cccBaseURL = Endpoints.CCCAPI;

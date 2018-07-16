@@ -4,6 +4,7 @@ import com.securemessaging.sm.enums.FyeoType;
 
 public class Message {
 
+    //meta information for the client SDK
     public boolean hasBeenSaved = false;
 
     private String messageGuid;

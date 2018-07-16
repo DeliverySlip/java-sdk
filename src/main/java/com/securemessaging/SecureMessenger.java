@@ -264,16 +264,31 @@ public class SecureMessenger {
         this.sendMessage(email);
     }
 
-    public AttachmentManager createAttachmentManagerForMessage(Message email){
-        return new AttachmentManager(email, this.client);
+    /**
+     * createAttachmentManagerForMessage is a factory method returning an object which can be used to interact
+     * specifically with the attachment portion of the message.
+     * @param message - the Message the attachments are being handled for - this is to give context for the AttachmentManager
+     * @return AttachmentManager
+     */
+    public AttachmentManager createAttachmentManagerForMessage(Message message){
+        return new AttachmentManager(message, this.client);
     }
 
-
-    public void uploadAttachmentsForMessage(Message email, File[] attachments)
+    /**
+     * uploadAttachmentsForMessage is a wrapper for simple attachment needs. The method tabkes the message and attachments
+     * array and uploads them to the server for the message before returning
+     * @param message - the Message the attachments are being uploaded to
+     * @param attachments - the files being uploaded to the message
+     * @throws SecureMessengerClientException - there was an error on the client side validating, parsing or handling
+     * uploading of the attachments
+     * @throws SecureMessengerException - there was a server side error uploading the attachments
+     * @throws IOException - there was an IO error with the attachment files
+     */
+    public void uploadAttachmentsForMessage(Message message, File[] attachments)
             throws SecureMessengerClientException, SecureMessengerException,
                                             IOException{
 
-        AttachmentManager manager = this.createAttachmentManagerForMessage(email);
+        AttachmentManager manager = this.createAttachmentManagerForMessage(message);
         for(int i = 0; i < attachments.length; i++){
             manager.addAttachmentFile(attachments[i]);
         }
@@ -373,6 +388,14 @@ public class SecureMessenger {
         }
     }
 
+    /**
+     * getAuthenticationToken generates an authentication token for extended use and logins over longer periods
+     * @param numberOfDaysUntilExpiry - how many days the authentication token will be valid for
+     * @return the authentication token as a string
+     * @throws SecureMessengerException - the server returned an error while generating the authentication token
+     * @throws SecureMessengerClientException - there was an error on the client side validating, parsing or handling the
+     * authentication token call
+     */
     public String getAuthenticationToken(int numberOfDaysUntilExpiry) throws SecureMessengerException, SecureMessengerClientException{
 
         GetNewAuthenticationTokenRequest request = new GetNewAuthenticationTokenRequest();
@@ -382,6 +405,14 @@ public class SecureMessenger {
         return response.authenticationToken;
     }
 
+    /**
+     * deleteAuthenticationToken deletes the specific passed in authentication token from the server. This disabled
+     * the authentication token from working
+     * @param authenticationToken - the authentication token as a string
+     * @throws SecureMessengerException - the server returned an error while deleting the authentication token
+     * @throws SecureMessengerClientException - there was an error on the client side validating, parsing or handling the
+     * authentication token call
+     */
     public void deleteAuthenticationToken(String authenticationToken) throws SecureMessengerException, SecureMessengerClientException{
 
         DeleteExpireAuthenticationTokenRequest request = new DeleteExpireAuthenticationTokenRequest();
@@ -390,6 +421,14 @@ public class SecureMessenger {
         this.client.makeRequest(request.getRequestRoute(), request, String.class);
     }
 
+    /**
+     * deleteAllAuthenticationTokens deletes all authentication tokens generated under a user to login. A single user
+     * can have multiple authentication tokens. By calling deleteAllAuthenticationTokens, all tokens are removed and
+     * access is revoked from all clients using them.
+     * @throws SecureMessengerException - the server returned an error while deleting the authentication tokens
+     * @throws SecureMessengerClientException - there was an error on the client side validating, parsing or handling
+     * the authentication token call
+     */
     public void deleteAllAuthenticationTokens() throws SecureMessengerException, SecureMessengerClientException{
 
         DeleteExpireAuthenticationTokensRequest request = new DeleteExpireAuthenticationTokensRequest();

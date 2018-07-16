@@ -24,7 +24,7 @@ public class HeaderRequestInterceptor implements ClientHttpRequestInterceptor {
 
     private boolean skipHeaders = false;
 
-    private String clientName = "java-secure-messenger";
+    private String clientName = "secure-messenger-java";
     private String clientVersion = BuildVersion.getBuildVersion();
 
     /**

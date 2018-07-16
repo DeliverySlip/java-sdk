@@ -2,6 +2,9 @@ package com.securemessaging.sm.search;
 
 import com.securemessaging.sm.enums.MessageBoxType;
 
+/**
+ * SearchMessageFilter represents the filter options available on message search
+ */
 public class SearchMessagesFilter {
 
     private String searchCriteria = "";
