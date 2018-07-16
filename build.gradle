@@ -1,4 +1,4 @@
-group 'securemessaging'
+group 'com.github.deliveryslip'
 version '3.2.0'
 
 
@@ -20,6 +20,7 @@ apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'maven'
 
 
 //make sure the source is compatible with java6 + make sure the target compiled code is compatible with java 6
@@ -34,12 +35,18 @@ shadowJar {
     //configurations = [project.configurations.compile]
 
     classifier = null
-    baseName = "deliveryslipclient"
+    baseName = "secure-messaging-java"
 
     manifest {
         attributes 'Implementation-Version': version
     }
 }
+
+artifacts{
+    archives shadowJar
+}
+
+jar.enabled = false
 
 dependencies {
 

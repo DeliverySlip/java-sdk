@@ -2,8 +2,12 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="deliveryslipclient_main" target="1.6" />
+      <module name="deliveryslipclient_test" target="1.6" />
       <module name="java-sdk_main" target="1.6" />
       <module name="java-sdk_test" target="1.6" />
+      <module name="secure-messaging-java_main" target="1.6" />
+      <module name="secure-messaging-java_test" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>

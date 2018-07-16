@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/java-sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/java-sdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/java-sdk_main.iml" filepath="$PROJECT_DIR$/.idea/modules/java-sdk_main.iml" group="java-sdk" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/java-sdk_test.iml" filepath="$PROJECT_DIR$/.idea/modules/java-sdk_test.iml" group="java-sdk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/secure-messaging-java.iml" filepath="$PROJECT_DIR$/.idea/modules/secure-messaging-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/secure-messaging-java_main.iml" filepath="$PROJECT_DIR$/.idea/modules/secure-messaging-java_main.iml" group="secure-messaging-java" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/secure-messaging-java_test.iml" filepath="$PROJECT_DIR$/.idea/modules/secure-messaging-java_test.iml" group="secure-messaging-java" />
     </modules>
   </component>
 </project>
