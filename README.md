@@ -10,6 +10,27 @@ The SDK is being expanded to eventually encompass all features offered by the Se
 not compatible with Java 9 at this point in time.
 
 # Setup
+## Gradle
+The Secure Messaging SDK can be imported into your gradle project using jitpack!
+
+Add the the jitpack maven repository to your project
+```$xslt
+repositories {
+            ...
+            maven { url "https://jitpack.io" }
+            ...
+}
+```
+Then add the Secure Messaging SDK as a dependency to your project
+```$xslt
+dependencies {
+        ...
+        compile 'com.github.deliveryslip:secure-messaging-java:<version>'
+   }
+```
+Replace the `<version>` with the latest version listed on the release page. jitpack is supported as of version 3.3.0
+
+## Manual
 To compile the Secure Messaging SDK execute the following command within the root of the project:
 ```
 ./gradlew.bat shadowJar  # windows
