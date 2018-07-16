@@ -1,12 +1,12 @@
-import com.securemessaging.javamessenger.SecureMessenger;
-import com.securemessaging.javamessenger.ex.SecureMessengerClientException;
-import com.securemessaging.javamessenger.ex.SecureMessengerException;
-import com.securemessaging.javamessenger.sm.Credentials;
-import com.securemessaging.javamessenger.sm.Message;
-import com.securemessaging.javamessenger.sm.PreCreateConfiguration;
-import com.securemessaging.javamessenger.sm.enums.ActionCode;
-import com.securemessaging.javamessenger.sm.enums.BodyFormat;
-import com.securemessaging.javamessenger.sm.enums.FyeoType;
+import com.securemessaging.SecureMessenger;
+import com.securemessaging.ex.SecureMessengerClientException;
+import com.securemessaging.ex.SecureMessengerException;
+import com.securemessaging.sm.Credentials;
+import com.securemessaging.sm.Message;
+import com.securemessaging.sm.PreCreateConfiguration;
+import com.securemessaging.sm.enums.ActionCode;
+import com.securemessaging.sm.enums.BodyFormat;
+import com.securemessaging.sm.enums.FyeoType;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

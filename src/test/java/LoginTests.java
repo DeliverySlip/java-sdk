@@ -1,10 +1,10 @@
 import com.fasterxml.jackson.databind.ser.Serializers;
-import com.securemessaging.javamessenger.SecureMessenger;
-import com.securemessaging.javamessenger.client.ClientRequestHandler;
-import com.securemessaging.javamessenger.ex.SecureMessengerClientException;
-import com.securemessaging.javamessenger.ex.SecureMessengerException;
-import com.securemessaging.javamessenger.sm.Credentials;
-import com.securemessaging.javamessenger.sm.auth.ServiceCodeResolver;
+import com.securemessaging.SecureMessenger;
+import com.securemessaging.client.ClientRequestHandler;
+import com.securemessaging.ex.SecureMessengerClientException;
+import com.securemessaging.ex.SecureMessengerException;
+import com.securemessaging.sm.Credentials;
+import com.securemessaging.sm.auth.ServiceCodeResolver;
 import org.junit.jupiter.api.Test;
 
 public class LoginTests extends BaseTestCase {
