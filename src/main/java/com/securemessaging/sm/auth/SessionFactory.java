@@ -8,6 +8,10 @@ import com.securemessaging.SMRequestInterface;
 import com.securemessaging.sm.request.GetUserSettingsRequest;
 import com.securemessaging.sm.response.GetUserSettingsResponse;
 
+/**
+ * SessionFactory creates Session objects so that the ClientRequestHandler has context on what and where to make its
+ * API calls to
+ */
 public class SessionFactory {
 
     public static Session createSession(SMAuthenticationInterface authentication, String baseURL) throws SecureMessengerClientException, SecureMessengerException{

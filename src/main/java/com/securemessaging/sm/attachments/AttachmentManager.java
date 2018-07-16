@@ -22,14 +22,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * AttachmentManager handles uploading and downloading of attachments along with event handling
+ */
 public class AttachmentManager {
 
+    /**
+     * OnAttachmentUploadEventListenerInterface defines the event methods that are called during an upload
+     */
     public interface OnAttachmentUploadEventListenerInterface{
 
+        /**
+         * onProgress is called everytime a chunk is uploaded to the API
+         * @param placeholder - the placeholder representing the attachment being uploaded
+         * @param totalChunks - the total number of chunks being uploaded
+         * @param chunksUploaded - the number of chunks so far that have been uploaded
+         */
         void onProgress(AttachmentPlaceholder placeholder, int totalChunks, int chunksUploaded);
 
+        /**
+         * onStarted is called when the upload has begun and before the first chunk is uploaded to the API. This is called
+         * for each attachment
+         * @param placeholder - the placeholder representing the attachment
+         */
         void onStarted(AttachmentPlaceholder placeholder);
 
+        /**
+         * onComplete is called when the upload has completed after the last chunk is uploaded to the API. This is called
+         * for each attachment
+         * @param placeholder - the placeholder representing the attachment
+         */
         void onComplete(AttachmentPlaceholder placeholder);
     }
 
@@ -50,6 +72,14 @@ public class AttachmentManager {
         this.client = client;
     }
 
+    /**
+     * addAttachmentFile adds the passed file to the list of attachments to be uploaded. This method can only
+     * be called before preCreateAllAttachments(). If preCreateAllAttachments() has already been called this method
+     * will return false - meaning the attachment has not been added. Call attachmentsHaveBeenPreCreated() to check
+     * if preCreateAllAttachments() has been called
+     * @param file - the file to be uploaded
+     * @return - whether the file was successfully added to be uploaded
+     */
     public boolean addAttachmentFile(File file){
         if(!this.attachmentsHaveBeenPreCreated && file.exists() && file.canRead()){
             this.attachmentList.add(file);
@@ -58,10 +88,21 @@ public class AttachmentManager {
         return false;
     }
 
+    /**
+     * attachmentsHaveBeenPreCreated checks whether the added attachments have been precreated on the server yet
+     * @return - whether the attachments have been precreated or not
+     */
     public boolean attachmentsHaveBeenPreCreated(){
         return this.attachmentsHaveBeenPreCreated;
     }
 
+    /**
+     * preCreateAllAttachments executes processing to pre create all attachments. This allocates resources on the
+     * server for the incoming attachments being uploaded
+     * @throws SecureMessengerException - the server returned an error while pre creating the attachments
+     * @throws SecureMessengerClientException - there was an error on the client side, validating, processing or
+     * handling the precreateallattachments call
+     */
     public void preCreateAllAttachments() throws SecureMessengerException, SecureMessengerClientException{
 
         ArrayList<PreCreateAttachmentPlaceholder> attachmentPlaceholders = new ArrayList<PreCreateAttachmentPlaceholder>();
@@ -81,6 +122,11 @@ public class AttachmentManager {
         this.attachmentsHaveBeenPreCreated = true;
     }
 
+    /**
+     * uploadAllAttachments triggers the upload process of all attachments that have been added and precreated
+     * @throws SecureMessengerClientException
+     * @throws IOException - there is an IO related issue with one of the attachments
+     */
     public void uploadAllAttachments() throws SecureMessengerClientException, IOException{
         if(this.attachmentsHaveBeenPreCreated){
             for(int j = 0; j < this.preCreateAttachmentsResponse.attachmentPlaceholders.size(); j++){
@@ -93,6 +139,13 @@ public class AttachmentManager {
         }
     }
 
+    /**
+     * uploadAttachment allows the client to explicityly specify which attachments to upload. All attachments must
+     * be precreated before this method can be called
+     * @param attachment - the attachment to be uploaded
+     * @throws IOException - there is an IO related error with the attachment
+     * @throws SecureMessengerClientException
+     */
     public void uploadAttachment(AttachmentPlaceholder attachment) throws IOException, SecureMessengerClientException{
         if(this.attachmentsHaveBeenPreCreated){
             boolean attachmentFileFound = false;
@@ -113,6 +166,11 @@ public class AttachmentManager {
         }
     }
 
+    /**
+     * getAllPreCreatedAttachments returns a list of all the attachments that have been precreated. If none have been
+     * precreated, an empty list is returned
+     * @return a list of attachmentplaceholders of all the precreated attachments
+     */
     public List<AttachmentPlaceholder> getAllPreCreatedAttachments(){
         if(this.preCreateAttachmentsResponse == null){
             return new ArrayList<AttachmentPlaceholder>();
@@ -120,10 +178,23 @@ public class AttachmentManager {
         return this.preCreateAttachmentsResponse.attachmentPlaceholders;
     }
 
+    /**
+     * setOnAttachmentUploadProgressListener sets and unsets the event handler for attachment progress as its being
+     * uploaded. By passing null you can unset the listener. Only one listener can be set at a time
+     * @param listener - the event handler for events thrown by the AttachmentManager during upload
+     */
     public void setOnAttachmentUploadProgressListener(OnAttachmentUploadEventListenerInterface listener){
         this.onAttachmentUploadEventListenerInterface = listener;
     }
 
+    /**
+     * uploadAttachmentChunk is the processing method that uploaded each chunk of a given attachment
+     * @param attachment - the attachment the attachment chunks belong to
+     * @param messageGuid - the message the chunk is being uploaded to
+     * @param file - the file object being uploaded
+     * @throws IOException - an IO related error with the attachment file has occurred or a chunk/file is corrupted
+     * @throws FileNotFoundException - the attachment file could not found
+     */
     private void uploadAttachmentChunk(AttachmentPlaceholder attachment, String messageGuid, File file) throws IOException, FileNotFoundException {
 
         try{

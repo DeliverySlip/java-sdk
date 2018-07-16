@@ -53,6 +53,17 @@ public class ClientRequestHandler {
         restTemplate.setMessageConverters(messageConverters);
     }
 
+    /**
+     * makeRequest is the primary wrapper for executing web requests by the ClientRequestHandler
+     * @param route - the URL route without the base url being called
+     * @param request - the request being made
+     * @param responseType - the object the response JSON will be serialized into
+     * @param <T>
+     * @return - The serialized class object representing the JSON response
+     * @throws SecureMessengerClientException - A client side exception has occurred. Handling of the request or response has failed
+     * @throws SecureMessengerException - A server side exception has occurred. The server returned an error, and the
+     * client has handled it successfully.
+     */
     public <T> T makeRequest(String route, SMRequestInterface request, Class<T> responseType) throws SecureMessengerClientException, SecureMessengerException{
         try{
             switch(request.getRequestMethod()){
@@ -96,36 +107,69 @@ public class ClientRequestHandler {
         }
     }
 
+    /**
+     * set the client name header value. This is to uniquely identify the client on the Secure Messaging API.
+     * @param clientName - the name of the client as a string
+     */
     public void setClientName(String clientName){
         this.authInterceptor.setClientName(clientName);
     }
 
+    /**
+     * returns the version of the java sdk
+     * @return the java sdk version as a string
+     */
     public String getClientVersion(){
         return this.authInterceptor.getClientVersion();
     }
 
+    /**
+     * set the client version header value. This is to uniquely identify the version of the client on the Secure
+     * Messaging API
+     * @param clientVersion - the version of the client as a string
+     */
     public void setClientVersion(String clientVersion){
         this.authInterceptor.setClientVersion(clientVersion);
     }
 
-
+    /**
+     * helper method to return the Spring Framework rest template client
+     * @return
+     */
     public RestTemplate getRestTemplate(){
         return this.restTemplate;
     }
 
+    /**
+     * helper method to return the header interceptor used for managing authentication with the Secure Messaging API
+     * @return
+     */
     public HeaderRequestInterceptor getAuthInterceptor() {
         return authInterceptor;
     }
 
+    /**
+     * helper method to return the base url set for communication with the Secure Messaging API
+     * @return
+     */
     public String getBaseURL() {
         return baseURL;
     }
 
+    /**
+     * set the session information for the ClientRequestHandler. This gives the client context as to where to call
+     * the api and for whose account
+     * @param session the session
+     */
     public void setSession(Session session){
         this.clientSession = session;
         this.authInterceptor.addSessionToken(session.sessionToken);
     }
 
+    /**
+     * helper method to return the session object
+     * @return
+     */
     public Session getSession(){
         return this.clientSession;
     }
