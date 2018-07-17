@@ -76,7 +76,6 @@ public class ClientRequestHandler {
         }
     }
 
-    //TODO: Implement proxy event handling
     public interface OnProxyInterceptionEventListenerInterface{
 
         boolean interceptRequests();
@@ -89,7 +88,6 @@ public class ClientRequestHandler {
         System.out.println("Event Listener Being Set In ClientRequestHandler");
         onProxyInterceptionEventListenerInterface = listener;
     }
-
 
     /**
      * makeRequest is the primary wrapper for executing web requests by the ClientRequestHandler

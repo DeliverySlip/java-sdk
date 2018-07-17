@@ -5,7 +5,6 @@ import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.Credentials;
 import com.securemessaging.sm.auth.ServiceCodeResolver;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 public class LoginTests extends BaseTestCase {
