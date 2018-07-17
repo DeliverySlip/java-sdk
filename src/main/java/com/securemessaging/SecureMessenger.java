@@ -94,7 +94,7 @@ public class SecureMessenger implements SecureMessengerInterface {
      */
     public void login(SMAuthenticationInterface authentication) throws SecureMessengerException, SecureMessengerClientException{
 
-        Session session = SessionFactory.createSession(authentication, this.client.getBaseURL());
+        Session session = SessionFactory.createSession(authentication, this.client);
         this.client.setSession(session);
     }
 

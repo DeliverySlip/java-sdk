@@ -5,6 +5,7 @@ import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.intercepters.HeaderRequestInterceptor;
 import com.securemessaging.SMRequestInterface;
+import com.securemessaging.intercepters.ProxyRequestInterceptor;
 import com.securemessaging.sm.Session;
 import com.securemessaging.sm.response.meta.ResponseStatus;
 import org.springframework.http.HttpEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,19 +32,24 @@ public class ClientRequestHandler {
 
     private RestTemplate restTemplate;
     private HeaderRequestInterceptor authInterceptor;
+    private static ProxyRequestInterceptor proxyInterceptor;
 
     private String baseURL;
 
     private Session clientSession;
 
     public ClientRequestHandler(String baseURL){
-
         this.baseURL = baseURL;
 
         restTemplate = new RestTemplate();
+
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
         authInterceptor = new HeaderRequestInterceptor();
         interceptors.add(authInterceptor);
+
+        proxyInterceptor = new ProxyRequestInterceptor();
+        interceptors.add(proxyInterceptor);
+
         restTemplate.setInterceptors(interceptors);
 
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -51,17 +58,36 @@ public class ClientRequestHandler {
         messageConverters.add(new MappingJackson2HttpMessageConverter());
         // Add the message converters to the restTemplate
         restTemplate.setMessageConverters(messageConverters);
+
+
+        if(onProxyInterceptionEventListenerInterface == null) {
+            proxyInterceptor.setOnRequestInterceptionEventHandler(null);
+        }else{
+            proxyInterceptor.setOnRequestInterceptionEventHandler(new ProxyRequestInterceptor.OnRequestInterceptionEventHandler() {
+                @Override
+                public URI getProxyPath(URI originalUri) {
+                    if(onProxyInterceptionEventListenerInterface.interceptRequests()){
+                        return onProxyInterceptionEventListenerInterface.intercept(originalUri);
+                    }else{
+                        return originalUri;
+                    }
+                }
+            });
+        }
     }
 
     //TODO: Implement proxy event handling
     public interface OnProxyInterceptionEventListenerInterface{
 
+        boolean interceptRequests();
+
+        URI intercept(URI uri);
     }
 
-    private OnProxyInterceptionEventListenerInterface onProxyInterceptionEventListenerInterface = null;
-
-    public void setOnProxyInterceptionEventListenerInterface(OnProxyInterceptionEventListenerInterface listener){
-        this.onProxyInterceptionEventListenerInterface = listener;
+    private static OnProxyInterceptionEventListenerInterface onProxyInterceptionEventListenerInterface = null;
+    public static void setOnProxyInterceptionEventListenerInterface(OnProxyInterceptionEventListenerInterface listener){
+        System.out.println("Event Listener Being Set In ClientRequestHandler");
+        onProxyInterceptionEventListenerInterface = listener;
     }
 
 

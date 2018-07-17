@@ -14,22 +14,25 @@ import java.net.URISyntaxException;
 
 public class ProxyRequestInterceptor implements ClientHttpRequestInterceptor {
 
-    private String baseUrl;
-    private String path;
-
-    public void setProxyBaseUrl(String baseUrl){
-        this.baseUrl = baseUrl;
+    private OnRequestInterceptionEventHandler onRequestInterceptionEventHandler;
+    public void setOnRequestInterceptionEventHandler(OnRequestInterceptionEventHandler listener){
+        this.onRequestInterceptionEventHandler = listener;
     }
 
-    public void setProxyPath(String path){
-        this.path = path;
+    public interface OnRequestInterceptionEventHandler{
+        URI getProxyPath(URI originalUri);
     }
-
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
 
         URLOverridableHttpRequestWrapper wrapper = new URLOverridableHttpRequestWrapper(request);
+
+        if(this.onRequestInterceptionEventHandler != null){
+            URI newURI = this.onRequestInterceptionEventHandler.getProxyPath(request.getURI());
+            wrapper.setURI(newURI);
+        }
+
         return execution.execute(wrapper, body);
     }
 
@@ -37,15 +40,19 @@ public class ProxyRequestInterceptor implements ClientHttpRequestInterceptor {
 
         public URLOverridableHttpRequestWrapper(HttpRequest request) {
             super(request);
+            uriOverride = request.getURI();
+        }
+
+
+        private URI uriOverride;
+
+        public void setURI(URI uri){
+            this.uriOverride = uri;
         }
 
         @Override
         public URI getURI() {
-            try {
-                return new URI(baseUrl + "/" + path);
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
+            return this.uriOverride;
         }
     }
 }
