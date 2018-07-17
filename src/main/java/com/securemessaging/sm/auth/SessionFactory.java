@@ -14,12 +14,10 @@ import com.securemessaging.sm.response.GetUserSettingsResponse;
  */
 public class SessionFactory {
 
-    public static Session createSession(SMAuthenticationInterface authentication, String baseURL) throws SecureMessengerClientException, SecureMessengerException{
+    public static Session createSession(SMAuthenticationInterface authentication, ClientRequestHandler client) throws SecureMessengerClientException, SecureMessengerException{
 
         //create the session however appropriate
         SMRequestInterface requestBody = authentication.getRequestBody();
-        ClientRequestHandler client = new ClientRequestHandler(baseURL);
-
         Session session = client.makeRequest(requestBody.getRequestRoute(), requestBody, Session.class);
 
         // then get client information aswell to link with the session information

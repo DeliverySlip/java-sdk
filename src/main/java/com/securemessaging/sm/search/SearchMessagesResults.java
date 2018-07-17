@@ -9,6 +9,7 @@ import com.securemessaging.sm.enums.FyeoType;
 import com.securemessaging.sm.request.GetSearchMessagesRequest;
 import com.securemessaging.sm.response.GetSearchMessagesResponse;
 import com.securemessaging.sm.response.MessageSummaryResponse;
+import com.securemessaging.utils.SMConverter;
 
 import java.util.*;
 
@@ -43,40 +44,7 @@ public class SearchMessagesResults implements Iterable<Message>, Collection<Mess
         ArrayList<Message> messages = new ArrayList<Message>();
 
         for (MessageSummaryResponse messageSummaryResponse : responseResults) {
-            Message message = new Message();
-
-            List<String> toEmails = new ArrayList<String>();
-            for(MessageSummaryResponse.User user: messageSummaryResponse.to){
-                toEmails.add(user.email);
-            }
-            message.setTo(toEmails.toArray(new String[toEmails.size()]));
-
-            List<String> ccEmails = new ArrayList<String>();
-            for(MessageSummaryResponse.User user: messageSummaryResponse.cc){
-                ccEmails.add(user.email);
-            }
-            message.setCC(ccEmails.toArray(new String[ccEmails.size()]));
-
-            List<String> bccEmails = new ArrayList<String>();
-            for(MessageSummaryResponse.User user: messageSummaryResponse.bcc){
-                bccEmails.add(user.email);
-            }
-            message.setBCC(bccEmails.toArray(new String[bccEmails.size()]));
-
-            message.setBody(messageSummaryResponse.body);
-            message.setBodyFormat(BodyFormat.enumFromEnumText(messageSummaryResponse.bodyFormat));
-            message.setSubject(messageSummaryResponse.subject);
-            message.setMessageGuid(messageSummaryResponse.guid);
-
-            message.setFrom(new String[] { messageSummaryResponse.sender.email});
-
-            message.setForward(messageSummaryResponse.messageOptions.allowForward);
-            message.setReply(messageSummaryResponse.messageOptions.allowReply);
-            message.setTracking(messageSummaryResponse.messageOptions.allowTracking);
-            message.setShareTracking(messageSummaryResponse.messageOptions.shareTracking);
-            message.setFyeoType(FyeoType.enumFromEnumText(messageSummaryResponse.messageOptions.fyeoType));
-
-            messages.add(message);
+            messages.add(SMConverter.convertMessageSummaryToMessage(messageSummaryResponse));
         }
 
         return messages;

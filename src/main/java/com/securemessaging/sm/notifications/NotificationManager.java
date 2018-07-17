@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-public class NotificationManager {
+public class NotificationManager implements NotificationManagerInterface {
 
     public interface OnNotificationEventListener{
 

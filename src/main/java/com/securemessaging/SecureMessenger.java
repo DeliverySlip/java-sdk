@@ -17,6 +17,7 @@ import com.securemessaging.sm.request.*;
 import com.securemessaging.sm.response.*;
 import com.securemessaging.sm.search.SearchMessagesResults;
 import com.securemessaging.sm.search.SearchMessagesFilter;
+import com.securemessaging.utils.SMConverter;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
  * The SecureMessenger is a wrapper class to making API calls to carry out functions in creating and managing secure
  * emails
  */
-public class SecureMessenger {
+public class SecureMessenger implements SecureMessengerInterface {
 
     /** restTemplate RestTemplate  - instance of the Sprint restTemplate to make are REST API calls **/
     //private RestTemplate restTemplate;
@@ -93,7 +94,7 @@ public class SecureMessenger {
      */
     public void login(SMAuthenticationInterface authentication) throws SecureMessengerException, SecureMessengerClientException{
 
-        Session session = SessionFactory.createSession(authentication, this.client.getBaseURL());
+        Session session = SessionFactory.createSession(authentication, this.client);
         this.client.setSession(session);
     }
 
@@ -132,7 +133,33 @@ public class SecureMessenger {
 
     }
 
-    public SearchMessagesResults searchMessages(SearchMessagesFilter searchMessagesFilter)throws SecureMessengerException, SecureMessengerClientException{
+    /**
+     * getMessage retrieves a message matching the passed in messageGuid
+     * @param messageGuid the guid belonging to the message wanting to be retrieved
+     * @return
+     * @throws SecureMessengerException - the server returned an error while retrieving the message
+     * @throws SecureMessengerClientException - there was an error on the client side validating, parsing or handling
+     * retrieving the message
+     */
+    public Message getMessage(String messageGuid) throws SecureMessengerException, SecureMessengerClientException{
+
+        GetMessageRequest request = new GetMessageRequest();
+        request.messageGuid = messageGuid;
+
+        GetMessageResponse response = client.makeRequest(request.getRequestRoute(), request, GetMessageResponse.class);
+
+        Message message = SMConverter.convertMessageSummaryToMessage(response);
+        return message;
+    }
+
+    /**
+     * searchMessages uses the passed in filter and calls a search
+     * @param searchMessagesFilter - the filter defining parameters to search by
+     * @return a search results collection containing an iterator and caching system to retrieve all search results
+     * @throws SecureMessengerException
+     * @throws SecureMessengerClientException
+     */
+    public SearchMessagesResults searchMessages(SearchMessagesFilter searchMessagesFilter) throws SecureMessengerException, SecureMessengerClientException{
 
         GetSearchMessagesRequest request = new GetSearchMessagesRequest();
         request.searchCriteria = searchMessagesFilter.getSearchCriteria();

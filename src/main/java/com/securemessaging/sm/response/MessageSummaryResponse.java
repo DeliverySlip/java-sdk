@@ -44,7 +44,9 @@ public class MessageSummaryResponse {
 
     public MessageSummaryResponse.Options messageOptions = new MessageSummaryResponse.Options();
 
-    public class Options {
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Options {
         /* Set default values for message */
         public boolean allowForward = true;
         public boolean allowReply = true;
