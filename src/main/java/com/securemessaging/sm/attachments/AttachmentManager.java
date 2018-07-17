@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * AttachmentManager handles uploading and downloading of attachments along with event handling
  */
-public class AttachmentManager {
+public class AttachmentManager implements AttachmentManagerInterface {
 
     /**
      * OnAttachmentUploadEventListenerInterface defines the event methods that are called during an upload

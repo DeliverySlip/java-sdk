@@ -34,7 +34,7 @@ import java.util.ArrayList;
  * The SecureMessenger is a wrapper class to making API calls to carry out functions in creating and managing secure
  * emails
  */
-public class SecureMessenger {
+public class SecureMessenger implements SecureMessengerInterface {
 
     /** restTemplate RestTemplate  - instance of the Sprint restTemplate to make are REST API calls **/
     //private RestTemplate restTemplate;

@@ -53,6 +53,18 @@ public class ClientRequestHandler {
         restTemplate.setMessageConverters(messageConverters);
     }
 
+    //TODO: Implement proxy event handling
+    public interface OnProxyInterceptionEventListenerInterface{
+
+    }
+
+    private OnProxyInterceptionEventListenerInterface onProxyInterceptionEventListenerInterface = null;
+
+    public void setOnProxyInterceptionEventListenerInterface(OnProxyInterceptionEventListenerInterface listener){
+        this.onProxyInterceptionEventListenerInterface = listener;
+    }
+
+
     /**
      * makeRequest is the primary wrapper for executing web requests by the ClientRequestHandler
      * @param route - the URL route without the base url being called
