@@ -5,20 +5,23 @@ import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.AttachmentChunk;
 import com.securemessaging.sm.Message;
+import com.securemessaging.sm.Session;
+import com.securemessaging.sm.request.GetMessageRequest;
 import com.securemessaging.sm.request.PostPreCreateAttachmentsRequest;
+import com.securemessaging.sm.response.GetMessageResponse;
+import com.securemessaging.sm.response.MessageSummaryResponse;
 import com.securemessaging.sm.response.PostPreCreateAttachmentsResponse;
+import com.securemessaging.utils.SMConverter;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import javax.xml.ws.Response;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -261,4 +264,88 @@ public class AttachmentManager implements AttachmentManagerInterface {
             throw ioe;
         }
     }
+
+    public void downloadAllAttachments(String rootDownloadDirectory) throws SecureMessengerException, SecureMessengerClientException,IOException, FileNotFoundException
+    {
+        List<AttachmentSummary> attachments = getAttachmentsInfo();
+        for(AttachmentSummary summary : attachments){
+            downloadAttachment(summary, rootDownloadDirectory);
+        }
+    }
+
+    public List<AttachmentSummary> getAttachmentsInfo() throws SecureMessengerException, SecureMessengerClientException {
+
+        GetMessageRequest request = new GetMessageRequest();
+        request.messageGuid = this.message.getMessageGuid();
+
+        GetMessageResponse response = client.makeRequest(request.getRequestRoute(), request, GetMessageResponse.class);
+        return response.attachments;
+    }
+
+    public void downloadAttachment(AttachmentSummary attachment, String rootDownloadDirectory) throws IOException, FileNotFoundException{
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        ArrayList<MediaType> mediaTypes = new ArrayList<MediaType>();
+        mediaTypes.add(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setAccept(mediaTypes);
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>(httpHeaders);
+
+        RestTemplate restTemplate = this.client.getRestTemplate();
+
+        ResponseEntity<byte[]> response = restTemplate.exchange(this.client.getBaseURL() + "/attachments/" + attachment.guid,
+                HttpMethod.GET, httpEntity, byte[].class);
+
+        if(response.getStatusCode() == HttpStatus.OK){
+
+            //in case the user adds an end slash, take it off as we supply it ourself
+            String trimmedRootDownloadDirectory = "";
+            if (rootDownloadDirectory.endsWith("/")) {
+                trimmedRootDownloadDirectory = rootDownloadDirectory.substring(0, rootDownloadDirectory.length() - 1);
+            }else{
+                trimmedRootDownloadDirectory = rootDownloadDirectory;
+            }
+
+            try{
+                File outputDir = new File(trimmedRootDownloadDirectory);
+                outputDir.mkdirs();
+
+                File outputFile = new File("$trimmedRootDownloadDirectory${File.separator}${attachment.fileName}");
+
+                if(!outputFile.exists()){
+                    outputFile.createNewFile();
+                }
+
+                FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+                InputStream byteInputStream = new ByteArrayInputStream(response.getBody());
+
+                byte[] buffer = new byte[1024];
+                int len = byteInputStream.read(buffer);
+                while(len != -1){
+                    fileOutputStream.write(buffer, 0, len);
+                    len = byteInputStream.read(buffer);
+                }
+
+                fileOutputStream.flush();
+                fileOutputStream.close();
+
+            }catch(FileNotFoundException fnfe){
+                //the file for the FileOutputStream does not exist
+                System.err.println("File Creation For Download Failed. Permissions?");
+                fnfe.printStackTrace();
+                throw fnfe;
+            }catch(IOException ioe){
+                //failed to create the new file, or failed to read/write during the transfer
+                System.err.println("Creation of File Failed OR Read/Write During Download Failed");
+                ioe.printStackTrace();
+                throw ioe;
+            }
+
+        }
+
+
+
+    }
+
+
 }
