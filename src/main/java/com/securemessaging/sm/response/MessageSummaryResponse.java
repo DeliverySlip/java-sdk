@@ -3,6 +3,7 @@ package com.securemessaging.sm.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.securemessaging.sm.Message;
+import com.securemessaging.sm.attachments.AttachmentSummary;
 import com.securemessaging.sm.enums.BodyFormat;
 import com.securemessaging.sm.enums.FyeoType;
 import lombok.Data;
@@ -54,4 +55,8 @@ public class MessageSummaryResponse {
         public String fyeoType; //convert this to FYEOType Enum
         public boolean shareTracking = true;
     }
+
+
+
+    public ArrayList<AttachmentSummary> attachments;
 }
