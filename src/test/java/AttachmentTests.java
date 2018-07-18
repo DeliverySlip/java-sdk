@@ -51,6 +51,8 @@ public class AttachmentTests extends BaseTestCase {
             message = messenger.saveMessage(message);
             messenger.sendMessage(message);
 
+            fileInputStream.close();
+
 
         }catch(FileNotFoundException fnfe){
             Assert.fail();
@@ -73,7 +75,64 @@ public class AttachmentTests extends BaseTestCase {
     }
 
     @Test
-    public void testUploadAndDownloadOfStream(){
+    public void testUploadAndDownloadOfStream() throws FileNotFoundException, URISyntaxException, IOException,
+            SecureMessengerException, SecureMessengerClientException{
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            message = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
+
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            Assert.assertTrue("Attachment Successfuly Added", manager.addAttachmentFile(fileInputStream, "yellow.jpg"));
+            manager.preCreateAllAttachments();
+            manager.uploadAllAttachments();
+
+            fileInputStream.close();
+
+            message = messenger.saveMessage(message);
+            messenger.sendMessage(message);
+
+            manager.downloadAllAttachments(".");
+
+            for(AttachmentSummary summary: manager.getAttachmentsInfo()){
+                File downloadedFile = new File("./" + summary.fileName);
+                Assert.assertTrue("Assert that the File Exists in the desired download directory", downloadedFile.exists());
+                Assert.assertTrue("Assert that the File is indeed a file in the desired download directory", downloadedFile.isFile());
+            }
+
+        }catch(FileNotFoundException fnfe){
+            Assert.fail();
+            throw fnfe;
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            Assert.fail();
+            throw smce;
+        }
+
 
     }
 
@@ -119,8 +178,8 @@ public class AttachmentTests extends BaseTestCase {
     }
 
     @Test
-    public void testSendAttachmentManagerWorkflow() throws SecureMessengerException, SecureMessengerClientException, IOException{
-
+    public void testSendAttachmentManagerWorkflow() throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException{
 
         try{
             SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
@@ -139,26 +198,19 @@ public class AttachmentTests extends BaseTestCase {
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
 
-            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
-            File tempFile = File.createTempFile("yellow-", ".jpg");
-            tempFile.deleteOnExit();
-            OutputStream oStream = new FileOutputStream(tempFile);
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
 
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            while((read = iStream.read(bytes)) != -1){
-                oStream.write(bytes, 0, read);
-            }
-
-            oStream.flush();
-            oStream.close();
-
-            manager.addAttachmentFile(tempFile);
+            manager.addAttachmentFile(file);
             manager.preCreateAllAttachments();
             manager.uploadAllAttachments();
 
             message = messenger.saveMessage(message);
             messenger.sendMessage(message);
+
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -173,7 +225,8 @@ public class AttachmentTests extends BaseTestCase {
     }
 
     @Test
-    public void testAttachmentManagerUploadAndDownloadEachAttachment() throws SecureMessengerException, SecureMessengerClientException, IOException{
+    public void testAttachmentManagerUploadAndDownloadEachAttachment() throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException{
 
         try{
             SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
@@ -192,28 +245,15 @@ public class AttachmentTests extends BaseTestCase {
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
 
-            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
-            File tempFile = File.createTempFile("yellow-", ".jpg");
-            tempFile.deleteOnExit();
-            OutputStream oStream = new FileOutputStream(tempFile);
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
 
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            while((read = iStream.read(bytes)) != -1){
-                oStream.write(bytes, 0, read);
-            }
-
-            oStream.flush();
-            oStream.close();
-
-
-            manager.addAttachmentFile(tempFile);
+            manager.addAttachmentFile(file);
             manager.preCreateAllAttachments();
             manager.uploadAllAttachments();
 
             message = messenger.saveMessage(message);
             messenger.sendMessage(message);
-
 
             List<AttachmentSummary> attachments = manager.getAttachmentsInfo();
 
@@ -223,12 +263,15 @@ public class AttachmentTests extends BaseTestCase {
             }
 
             for(AttachmentSummary summary: manager.getAttachmentsInfo()){
-                File file = new File("./" + summary.fileName);
-                Assert.assertTrue("Assert that the File Exists in the desired download directory", file.exists());
-                Assert.assertTrue("Assert that the File is indeed a file in the desired download directory", file.isFile());
+                File downloadedFile = new File("./" + summary.fileName);
+                Assert.assertTrue("Assert that the File Exists in the desired download directory", downloadedFile.exists());
+                Assert.assertTrue("Assert that the File is indeed a file in the desired download directory", downloadedFile.isFile());
             }
 
 
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -242,7 +285,8 @@ public class AttachmentTests extends BaseTestCase {
     }
 
     @Test
-    public void testAttachmentManagerUploadAndDownloadAllAttachments() throws SecureMessengerException, SecureMessengerClientException, IOException{
+    public void testAttachmentManagerUploadAndDownloadAllAttachments() throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException{
 
 
         try{
@@ -262,39 +306,29 @@ public class AttachmentTests extends BaseTestCase {
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
 
-            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
-            File tempFile = File.createTempFile("yellow-", ".jpg");
-            tempFile.deleteOnExit();
-            OutputStream oStream = new FileOutputStream(tempFile);
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
 
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            while((read = iStream.read(bytes)) != -1){
-                oStream.write(bytes, 0, read);
-            }
-
-            oStream.flush();
-            oStream.close();
-
-
-            manager.addAttachmentFile(tempFile);
+            manager.addAttachmentFile(file);
             manager.preCreateAllAttachments();
             manager.uploadAllAttachments();
 
             message = messenger.saveMessage(message);
             messenger.sendMessage(message);
 
-
             manager.downloadAllAttachments(".");
 
             for(AttachmentSummary summary: manager.getAttachmentsInfo()){
-                File file = new File("./" + summary.fileName);
-                Assert.assertTrue("Assert that the File Exists in the desired download directory", file.exists());
-                Assert.assertTrue("Assert that the File is indeed a file in the desired download directory", file.isFile());
+                File downloadedFile = new File("./" + summary.fileName);
+                Assert.assertTrue("Assert that the File Exists in the desired download directory", downloadedFile.exists());
+                Assert.assertTrue("Assert that the File is indeed a file in the desired download directory", downloadedFile.isFile());
             }
 
 
-        }catch(SecureMessengerException sme){
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch (SecureMessengerException sme){
             Assert.fail();
             throw sme;
         }catch(SecureMessengerClientException smce){
@@ -307,7 +341,8 @@ public class AttachmentTests extends BaseTestCase {
     }
 
     @Test
-    public void testSendAttachmentManagerListenerWorkflow() throws SecureMessengerException, SecureMessengerClientException, IOException{
+    public void testSendAttachmentManagerListenerWorkflow() throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException{
 
 
         try{
@@ -327,22 +362,10 @@ public class AttachmentTests extends BaseTestCase {
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
 
-            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
-            File tempFile = File.createTempFile("yellow-", ".jpg");
-            tempFile.deleteOnExit();
-            OutputStream oStream = new FileOutputStream(tempFile);
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
 
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            while((read = iStream.read(bytes)) != -1){
-                oStream.write(bytes, 0, read);
-            }
-
-            oStream.flush();
-            oStream.close();
-
-
-            manager.addAttachmentFile(tempFile);
+            manager.addAttachmentFile(file);
             manager.preCreateAllAttachments();
 
             //user can now get micro progress of each attachment as they are uploaded chunk by chunk
@@ -370,6 +393,9 @@ public class AttachmentTests extends BaseTestCase {
 
             message = messenger.saveMessage(message);
             messenger.sendMessage(message);
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -380,13 +406,11 @@ public class AttachmentTests extends BaseTestCase {
             Assert.fail();
             throw ioe;
         }
-
     }
 
-
     @Test
-    public void testSendAttachmentManagerIteratorWorkflow() throws SecureMessengerException, SecureMessengerClientException, IOException{
-
+    public void testSendAttachmentManagerIteratorWorkflow() throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException{
 
         try{
             SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
@@ -405,21 +429,10 @@ public class AttachmentTests extends BaseTestCase {
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
 
-            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
-            File tempFile = File.createTempFile("yellow-", ".jpg");
-            tempFile.deleteOnExit();
-            OutputStream oStream = new FileOutputStream(tempFile);
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
 
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            while((read = iStream.read(bytes)) != -1){
-                oStream.write(bytes, 0, read);
-            }
-
-            oStream.flush();
-            oStream.close();
-
-            manager.addAttachmentFile(tempFile);
+            manager.addAttachmentFile(file);
             manager.preCreateAllAttachments();
 
             //user can now iterate through attachments and return status to the user as each attachment is uploaded
@@ -427,12 +440,15 @@ public class AttachmentTests extends BaseTestCase {
             Iterator<AttachmentPlaceholder> iterator = preCreatedAttachments.iterator();
             while(iterator.hasNext()){
                 AttachmentPlaceholder placeholder = iterator.next();
-
                 manager.uploadAttachment(placeholder);
             }
 
             message = messenger.saveMessage(message);
             messenger.sendMessage(message);
+
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;

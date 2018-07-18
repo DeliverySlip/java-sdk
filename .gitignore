@@ -51,6 +51,7 @@ fabric.properties
 
 .gradle
 build
+yellow.jpg # don't include the testing data
 
 src/test/resources/*.properties
 
