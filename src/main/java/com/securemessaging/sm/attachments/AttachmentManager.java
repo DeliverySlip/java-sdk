@@ -19,9 +19,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.xml.ws.Response;
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +84,39 @@ public class AttachmentManager implements AttachmentManagerInterface {
     public boolean addAttachmentFile(File file){
         if(!this.attachmentsHaveBeenPreCreated && file.exists() && file.canRead()){
             this.attachmentList.add(file);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addAttachmentFile(FileInputStream fileStream, String fileName) throws IOException{
+
+        if(!this.attachmentsHaveBeenPreCreated){
+
+            File tempFile = File.createTempFile("attachment-", ".dat");
+            tempFile.deleteOnExit();
+            OutputStream oStream = new FileOutputStream(tempFile);
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while((read = fileStream.read(bytes)) != -1){
+                oStream.write(bytes, 0, read);
+            }
+
+            oStream.flush();
+            oStream.close();
+
+
+            File newFile = new File(tempFile.getParent(), fileName);
+            newFile.delete();
+            if(!tempFile.renameTo(newFile)){
+
+                tempFile.delete();
+
+                return false;
+            }
+
+            this.attachmentList.add(newFile);
             return true;
         }
         return false;
@@ -310,7 +341,7 @@ public class AttachmentManager implements AttachmentManagerInterface {
                 File outputDir = new File(trimmedRootDownloadDirectory);
                 outputDir.mkdirs();
 
-                File outputFile = new File("$trimmedRootDownloadDirectory${File.separator}${attachment.fileName}");
+                File outputFile = new File(trimmedRootDownloadDirectory + File.separator + attachment.fileName);
 
                 if(!outputFile.exists()){
                     outputFile.createNewFile();

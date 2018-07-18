@@ -11,6 +11,7 @@ import com.securemessaging.sm.response.meta.ResponseStatus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -56,6 +57,7 @@ public class ClientRequestHandler {
         messageConverters.add(new FormHttpMessageConverter());
         messageConverters.add(new StringHttpMessageConverter());
         messageConverters.add(new MappingJackson2HttpMessageConverter());
+        messageConverters.add(new ByteArrayHttpMessageConverter());
         // Add the message converters to the restTemplate
         restTemplate.setMessageConverters(messageConverters);
 
