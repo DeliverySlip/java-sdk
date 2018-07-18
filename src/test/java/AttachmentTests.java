@@ -5,12 +5,12 @@ import com.securemessaging.sm.Credentials;
 import com.securemessaging.sm.Message;
 import com.securemessaging.sm.attachments.AttachmentManager;
 import com.securemessaging.sm.attachments.AttachmentPlaceholder;
+import com.securemessaging.sm.attachments.AttachmentSummary;
 import com.securemessaging.sm.enums.BodyFormat;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,8 +34,21 @@ public class AttachmentTests extends BaseTestCase {
 
             message = messenger.saveMessage(message);
 
-            File file = new File("resources/yellow.jpg");
-            messenger.uploadAttachmentsForMessage(message, new File[]{file});
+            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
+            File tempFile = File.createTempFile("yellow-", ".jpg");
+            tempFile.deleteOnExit();
+            OutputStream oStream = new FileOutputStream(tempFile);
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while((read = iStream.read(bytes)) != -1){
+                oStream.write(bytes, 0, read);
+            }
+
+            oStream.flush();
+            oStream.close();
+
+            messenger.uploadAttachmentsForMessage(message, new File[]{tempFile});
 
             message = messenger.saveMessage(message);
             messenger.sendMessage(message);
@@ -68,7 +81,22 @@ public class AttachmentTests extends BaseTestCase {
             message = messenger.saveMessage(message);
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
-            manager.addAttachmentFile(new File("resources/yellow.jpg"));
+
+            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
+            File tempFile = File.createTempFile("yellow-", ".jpg");
+            tempFile.deleteOnExit();
+            OutputStream oStream = new FileOutputStream(tempFile);
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while((read = iStream.read(bytes)) != -1){
+                oStream.write(bytes, 0, read);
+            }
+
+            oStream.flush();
+            oStream.close();
+
+            manager.addAttachmentFile(tempFile);
             manager.preCreateAllAttachments();
             manager.uploadAllAttachments();
 
@@ -85,6 +113,128 @@ public class AttachmentTests extends BaseTestCase {
             throw ioe;
         }
 
+    }
+
+    @Test
+    public void testAttachmentManagerUploadAndDownloadEachAttachment() throws SecureMessengerException, SecureMessengerClientException, IOException{
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            message = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
+
+            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
+            File tempFile = File.createTempFile("yellow-", ".jpg");
+            tempFile.deleteOnExit();
+            OutputStream oStream = new FileOutputStream(tempFile);
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while((read = iStream.read(bytes)) != -1){
+                oStream.write(bytes, 0, read);
+            }
+
+            oStream.flush();
+            oStream.close();
+
+
+            manager.addAttachmentFile(tempFile);
+            manager.preCreateAllAttachments();
+            manager.uploadAllAttachments();
+
+            message = messenger.saveMessage(message);
+            messenger.sendMessage(message);
+
+
+            List<AttachmentSummary> attachments = manager.getAttachmentsInfo();
+
+            for(AttachmentSummary attachment : attachments){
+                System.out.println("Downloading Attachment: " + attachment.fileName + "." + attachment.originalFileExtension);
+                manager.downloadAttachment(attachment, ".");
+            }
+
+
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            Assert.fail();
+            throw smce;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }
+    }
+
+    @Test
+    public void testAttachmentManagerUploadAndDownloadAllAttachments() throws SecureMessengerException, SecureMessengerClientException, IOException{
+
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            message = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
+
+            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
+            File tempFile = File.createTempFile("yellow-", ".jpg");
+            tempFile.deleteOnExit();
+            OutputStream oStream = new FileOutputStream(tempFile);
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while((read = iStream.read(bytes)) != -1){
+                oStream.write(bytes, 0, read);
+            }
+
+            oStream.flush();
+            oStream.close();
+
+
+            manager.addAttachmentFile(tempFile);
+            manager.preCreateAllAttachments();
+            manager.uploadAllAttachments();
+
+            message = messenger.saveMessage(message);
+            messenger.sendMessage(message);
+
+
+            manager.downloadAllAttachments(".");
+
+
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            Assert.fail();
+            throw smce;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }
     }
 
     @Test
@@ -106,9 +256,24 @@ public class AttachmentTests extends BaseTestCase {
 
             message = messenger.saveMessage(message);
 
-            File file = new File("resources/yellow.jpg");
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
-            manager.addAttachmentFile(file);
+
+            InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
+            File tempFile = File.createTempFile("yellow-", ".jpg");
+            tempFile.deleteOnExit();
+            OutputStream oStream = new FileOutputStream(tempFile);
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while((read = iStream.read(bytes)) != -1){
+                oStream.write(bytes, 0, read);
+            }
+
+            oStream.flush();
+            oStream.close();
+
+
+            manager.addAttachmentFile(tempFile);
             manager.preCreateAllAttachments();
 
             //user can now get micro progress of each attachment as they are uploaded chunk by chunk
@@ -170,7 +335,22 @@ public class AttachmentTests extends BaseTestCase {
                 message = messenger.saveMessage(message);
 
                 AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
-                manager.addAttachmentFile(new File("resources/yellow.jpg"));
+
+                InputStream iStream = ClassLoader.getSystemResourceAsStream("yellow.jpg");
+                File tempFile = File.createTempFile("yellow-", ".jpg");
+                tempFile.deleteOnExit();
+                OutputStream oStream = new FileOutputStream(tempFile);
+
+                int read = 0;
+                byte[] bytes = new byte[1024];
+                while((read = iStream.read(bytes)) != -1){
+                    oStream.write(bytes, 0, read);
+                }
+
+                oStream.flush();
+                oStream.close();
+
+                manager.addAttachmentFile(tempFile);
                 manager.preCreateAllAttachments();
 
                 //user can now iterate through attachments and return status to the user as each attachment is uploaded
