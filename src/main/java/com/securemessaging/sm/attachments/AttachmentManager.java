@@ -94,7 +94,6 @@ public class AttachmentManager implements AttachmentManagerInterface {
         if(!this.attachmentsHaveBeenPreCreated){
 
             File tempFile = File.createTempFile("attachment-", ".dat");
-            tempFile.deleteOnExit();
             OutputStream oStream = new FileOutputStream(tempFile);
 
             int read = 0;
@@ -106,9 +105,15 @@ public class AttachmentManager implements AttachmentManagerInterface {
             oStream.flush();
             oStream.close();
 
-
             File newFile = new File(tempFile.getParent(), fileName);
-            newFile.delete();
+            if(!newFile.delete()){
+                //failed to delete means there are files with duplicate names being uploaded - the temp folder
+                //has multiple of the same file in it and are conflicting
+                tempFile.delete();
+
+                return false;
+            }
+
             if(!tempFile.renameTo(newFile)){
 
                 tempFile.delete();
@@ -116,6 +121,7 @@ public class AttachmentManager implements AttachmentManagerInterface {
                 return false;
             }
 
+            tempFile.delete();
             this.attachmentList.add(newFile);
             return true;
         }
