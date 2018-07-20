@@ -228,7 +228,7 @@ public class SecureMessenger implements SecureMessengerInterface {
      * wants to save the message to drafts, this is a required step before calling 'sendMessage'.
      * @param email Message - the message object to be saved
      */
-    public Message saveMessage(Message email) throws SecureMessengerException, SecureMessengerClientException{
+    public SavedMessage saveMessage(Message email) throws SecureMessengerException, SecureMessengerClientException{
 
         PutSaveMessageRequest request = new PutSaveMessageRequest();
         request.messageGuid = email.getMessageGuid();
@@ -249,17 +249,20 @@ public class SecureMessenger implements SecureMessengerInterface {
 
         email.hasBeenSaved = true;
 
-        return email;
+        return new SavedMessage(email);
 
     }
 
     /**
      * sendMessage sends the passed in message object. The passed in message object must have been saved before it
      * can be sent otherwise an exception will be thrown
-     * @param email Message - the email object to be sent
+     * @param savedMessage SavedMessage - the message object to be sent that has been saved
      */
-    public void sendMessage(Message email) throws SecureMessengerClientException, SecureMessengerException{
+    public void sendMessage(SavedMessage savedMessage) throws SecureMessengerClientException, SecureMessengerException{
 
+        Message email = savedMessage.message;
+
+        //TODO: This is redundant now
         if(!email.hasBeenSaved){
             throw new SecureMessengerClientException("The Message Must Be Saved Before It Can Be Sent. Ensure you have called" +
                     "saveMessage() before calling sendMessage()");
@@ -287,8 +290,8 @@ public class SecureMessenger implements SecureMessengerInterface {
     public void sendSimpleMessage(Message email) throws Exception{
         Message message = this.preCreateMessage();
         email.setMessageGuid(message.getMessageGuid());
-        this.saveMessage(email);
-        this.sendMessage(email);
+        SavedMessage savedMessage = this.saveMessage(email);
+        this.sendMessage(savedMessage);
     }
 
     /**

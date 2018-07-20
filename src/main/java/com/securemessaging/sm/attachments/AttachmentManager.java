@@ -379,9 +379,6 @@ public class AttachmentManager implements AttachmentManagerInterface {
             }
 
         }
-
-
-
     }
 
 
