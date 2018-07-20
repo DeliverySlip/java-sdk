@@ -33,9 +33,9 @@ public interface SecureMessengerInterface {
 
     NotificationManager getNotificationManagerForSession() throws SecureMessengerException, SecureMessengerClientException;
 
-    Message saveMessage(Message email) throws SecureMessengerException, SecureMessengerClientException;
+    SavedMessage saveMessage(Message email) throws SecureMessengerException, SecureMessengerClientException;
 
-    void sendMessage(Message email) throws SecureMessengerClientException, SecureMessengerException;
+    void sendMessage(SavedMessage email) throws SecureMessengerClientException, SecureMessengerException;
 
     AttachmentManager createAttachmentManagerForMessage(Message message);
 
