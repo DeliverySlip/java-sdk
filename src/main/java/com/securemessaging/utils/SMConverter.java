@@ -1,6 +1,6 @@
 package com.securemessaging.utils;
 
-import com.securemessaging.sm.Message;
+import com.securemessaging.Message;
 import com.securemessaging.sm.enums.BodyFormat;
 import com.securemessaging.sm.enums.FyeoType;
 import com.securemessaging.sm.response.MessageSummaryResponse;

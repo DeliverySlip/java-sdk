@@ -2,11 +2,8 @@ package com.securemessaging;
 
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
-import com.securemessaging.sm.Message;
 import com.securemessaging.sm.PreCreateConfiguration;
-import com.securemessaging.sm.attachments.AttachmentManager;
 import com.securemessaging.sm.auth.SMAuthenticationInterface;
-import com.securemessaging.sm.notifications.NotificationManager;
 import com.securemessaging.sm.search.SearchMessagesFilter;
 import com.securemessaging.sm.search.SearchMessagesResults;
 

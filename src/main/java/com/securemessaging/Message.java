@@ -1,4 +1,4 @@
-package com.securemessaging.sm;
+package com.securemessaging;
 import com.securemessaging.sm.enums.BodyFormat;
 import com.securemessaging.sm.enums.FyeoType;
 

@@ -1,9 +1,10 @@
+import com.securemessaging.SavedMessage;
 import com.securemessaging.SecureMessenger;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.Credentials;
-import com.securemessaging.sm.Message;
-import com.securemessaging.sm.attachments.AttachmentManager;
+import com.securemessaging.Message;
+import com.securemessaging.AttachmentManager;
 import com.securemessaging.sm.attachments.AttachmentPlaceholder;
 import com.securemessaging.sm.attachments.AttachmentSummary;
 import com.securemessaging.sm.enums.BodyFormat;
@@ -36,7 +37,7 @@ public class AttachmentTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            message = messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
 
@@ -48,8 +49,8 @@ public class AttachmentTests extends BaseTestCase {
             manager.preCreateAllAttachments();
             manager.uploadAllAttachments();
 
-            message = messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            savedMessage = messenger.saveMessage(message);
+            messenger.sendMessage(savedMessage);
 
             fileInputStream.close();
 
@@ -91,9 +92,9 @@ public class AttachmentTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            message = messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
-            AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
 
             URL resource = ClassLoader.getSystemResource("yellow.jpg");
             File file = new File(resource.toURI());
@@ -105,8 +106,8 @@ public class AttachmentTests extends BaseTestCase {
 
             fileInputStream.close();
 
-            message = messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
 
             manager.downloadAllAttachments(".");
 
@@ -153,15 +154,15 @@ public class AttachmentTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            message = messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
             URL resource = ClassLoader.getSystemResource("yellow.jpg");
             File file = new File(resource.toURI());
 
             messenger.uploadAttachmentsForMessage(message, new File[]{file});
 
-            message = messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            savedMessage = messenger.saveMessage(message);
+            messenger.sendMessage(savedMessage);
         }catch(URISyntaxException use){
             Assert.fail();
             throw use;
@@ -194,7 +195,7 @@ public class AttachmentTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            message = messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
 
@@ -205,8 +206,8 @@ public class AttachmentTests extends BaseTestCase {
             manager.preCreateAllAttachments();
             manager.uploadAllAttachments();
 
-            message = messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
 
         }catch(URISyntaxException use){
             Assert.fail();
@@ -241,9 +242,9 @@ public class AttachmentTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            message = messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
-            AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
 
             URL resource = ClassLoader.getSystemResource("yellow.jpg");
             File file = new File(resource.toURI());
@@ -252,8 +253,8 @@ public class AttachmentTests extends BaseTestCase {
             manager.preCreateAllAttachments();
             manager.uploadAllAttachments();
 
-            message = messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
 
             List<AttachmentSummary> attachments = manager.getAttachmentsInfo();
 
@@ -302,9 +303,9 @@ public class AttachmentTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            message = messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
-            AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
 
             URL resource = ClassLoader.getSystemResource("yellow.jpg");
             File file = new File(resource.toURI());
@@ -313,8 +314,8 @@ public class AttachmentTests extends BaseTestCase {
             manager.preCreateAllAttachments();
             manager.uploadAllAttachments();
 
-            message = messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
 
             manager.downloadAllAttachments(".");
 
@@ -358,9 +359,9 @@ public class AttachmentTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            message = messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
-            AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
 
             URL resource = ClassLoader.getSystemResource("yellow.jpg");
             File file = new File(resource.toURI());
@@ -391,8 +392,8 @@ public class AttachmentTests extends BaseTestCase {
 
             manager.uploadAllAttachments();
 
-            message = messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
         }catch(URISyntaxException use){
             Assert.fail();
             throw use;
@@ -425,7 +426,7 @@ public class AttachmentTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            message = messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
             AttachmentManager manager = messenger.createAttachmentManagerForMessage(message);
 
@@ -443,8 +444,8 @@ public class AttachmentTests extends BaseTestCase {
                 manager.uploadAttachment(placeholder);
             }
 
-            message = messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
 
         }catch(URISyntaxException use){
             Assert.fail();

@@ -1,8 +1,9 @@
+import com.securemessaging.SavedMessage;
 import com.securemessaging.SecureMessenger;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.Credentials;
-import com.securemessaging.sm.Message;
+import com.securemessaging.Message;
 import com.securemessaging.sm.PreCreateConfiguration;
 import com.securemessaging.sm.enums.ActionCode;
 import com.securemessaging.sm.enums.BodyFormat;
@@ -29,8 +30,8 @@ public class SendMessageTests extends BaseTestCase{
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
+            messenger.sendMessage(savedMessage);
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -59,8 +60,8 @@ public class SendMessageTests extends BaseTestCase{
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
+            messenger.sendMessage(savedMessage);
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -91,8 +92,8 @@ public class SendMessageTests extends BaseTestCase{
             message.setFyeoType(FyeoType.ACCOUNTPASSWORD);
             message.setPassword(password);
 
-            messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
+            messenger.sendMessage(savedMessage);
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -123,8 +124,8 @@ public class SendMessageTests extends BaseTestCase{
             message.setInviteNewUsers(true);
             message.setSendNotification(true);
 
-            messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
+            messenger.sendMessage(savedMessage);
 
         }catch(SecureMessengerException sme){
             Assert.fail();
@@ -157,8 +158,8 @@ public class SendMessageTests extends BaseTestCase{
             message.setFyeoType(FyeoType.UNIQUEPASSWORD);
             message.setPassword("password");
 
-            messenger.saveMessage(message);
-            messenger.sendMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
+            messenger.sendMessage(savedMessage);
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;

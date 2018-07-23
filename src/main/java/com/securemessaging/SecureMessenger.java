@@ -4,7 +4,6 @@ import com.securemessaging.client.ClientRequestHandler;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.*;
-import com.securemessaging.sm.attachments.AttachmentManager;
 import com.securemessaging.sm.attachments.AttachmentPlaceholder;
 import com.securemessaging.sm.attachments.AttachmentPlaceholderChunk;
 import com.securemessaging.sm.auth.SMAuthenticationInterface;
@@ -12,7 +11,6 @@ import com.securemessaging.sm.auth.ServiceCodeResolver;
 import com.securemessaging.sm.auth.SessionFactory;
 import com.securemessaging.sm.enums.ActionCode;
 import com.securemessaging.sm.enums.notifications.NotificationType;
-import com.securemessaging.sm.notifications.NotificationManager;
 import com.securemessaging.sm.request.*;
 import com.securemessaging.sm.response.*;
 import com.securemessaging.sm.search.SearchMessagesResults;
@@ -221,7 +219,9 @@ public class SecureMessenger implements SecureMessengerInterface {
         return manager;
     }*/
 
-
+    public SavedMessage saveMessage(SavedMessage savedMessage) throws SecureMessengerException, SecureMessengerClientException{
+        return saveMessage(savedMessage.message);
+    }
 
     /**
      * saveMessage saves the passed in message object into the logged in user's drafts. Regardless of whether the client
@@ -302,6 +302,10 @@ public class SecureMessenger implements SecureMessengerInterface {
      */
     public AttachmentManager createAttachmentManagerForMessage(Message message){
         return new AttachmentManager(message, this.client);
+    }
+
+    public AttachmentManager createAttachmentManagerForMessage(SavedMessage savedMessage){
+        return new AttachmentManager(savedMessage, this.client);
     }
 
     /**

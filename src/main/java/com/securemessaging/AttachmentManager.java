@@ -1,17 +1,14 @@
-package com.securemessaging.sm.attachments;
+package com.securemessaging;
 
 import com.securemessaging.client.ClientRequestHandler;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.AttachmentChunk;
-import com.securemessaging.sm.Message;
-import com.securemessaging.sm.Session;
+import com.securemessaging.sm.attachments.*;
 import com.securemessaging.sm.request.GetMessageRequest;
 import com.securemessaging.sm.request.PostPreCreateAttachmentsRequest;
 import com.securemessaging.sm.response.GetMessageResponse;
-import com.securemessaging.sm.response.MessageSummaryResponse;
 import com.securemessaging.sm.response.PostPreCreateAttachmentsResponse;
-import com.securemessaging.utils.SMConverter;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -71,6 +68,10 @@ public class AttachmentManager implements AttachmentManagerInterface {
         this.attachmentsHaveBeenPreCreated = false;
 
         this.client = client;
+    }
+
+    public AttachmentManager(SavedMessage savedMessage, ClientRequestHandler client){
+        this(savedMessage.message, client);
     }
 
     /**
