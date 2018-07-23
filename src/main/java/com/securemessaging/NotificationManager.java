@@ -1,4 +1,4 @@
-package com.securemessaging.sm.notifications;
+package com.securemessaging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pusher.client.Pusher;
@@ -8,21 +8,16 @@ import com.pusher.client.channel.ChannelEventListener;
 import com.pusher.client.channel.SubscriptionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
-import com.securemessaging.SecureMessenger;
 import com.securemessaging.client.ClientRequestHandler;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.sm.enums.notifications.EventType;
-import com.securemessaging.sm.enums.notifications.NotificationType;
 import com.securemessaging.sm.notifications.events.EventDataInterface;
 import com.securemessaging.sm.notifications.events.NewAssetPayload;
 import com.securemessaging.sm.notifications.events.UserTrackingPayload;
-import com.securemessaging.sm.request.PostSubscribeRequest;
 import com.securemessaging.sm.request.PutUpdateNotificationHeartbeatRequest;
 import com.securemessaging.sm.response.PutUpdateNotificationHeartbeatResponse;
-import com.securemessaging.sm.response.meta.ResponseStatus;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class NotificationManager implements NotificationManagerInterface {

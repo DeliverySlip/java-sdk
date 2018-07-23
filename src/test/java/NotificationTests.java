@@ -1,11 +1,12 @@
+import com.securemessaging.SavedMessage;
 import com.securemessaging.SecureMessenger;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.Credentials;
-import com.securemessaging.sm.Message;
+import com.securemessaging.Message;
 import com.securemessaging.sm.enums.BodyFormat;
 import com.securemessaging.sm.enums.notifications.EventType;
-import com.securemessaging.sm.notifications.NotificationManager;
+import com.securemessaging.NotificationManager;
 import com.securemessaging.sm.notifications.events.EventDataInterface;
 import com.securemessaging.sm.notifications.events.NewAssetPayload;
 import com.securemessaging.sm.notifications.events.UserTrackingPayload;
@@ -33,7 +34,7 @@ public class NotificationTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
 
             NotificationManager manager = messenger.getNotificationManagerForSession();
@@ -69,7 +70,7 @@ public class NotificationTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
 
             NotificationManager manager = messenger.getNotificationManagerForSession();
@@ -106,7 +107,7 @@ public class NotificationTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
 
             NotificationManager manager = messenger.getNotificationManagerForSession();
@@ -143,7 +144,7 @@ public class NotificationTests extends BaseTestCase {
             message.setBody("Hello Test Message From DeliverySlip Java Example");
             message.setBodyFormat(BodyFormat.TEXT);
 
-            messenger.saveMessage(message);
+            SavedMessage savedMessage = messenger.saveMessage(message);
 
             try{
 
@@ -204,7 +205,7 @@ public class NotificationTests extends BaseTestCase {
             }
 
 
-            messenger.sendMessage(message);
+            messenger.sendMessage(savedMessage);
 
             while(true){
                 Thread.sleep(10 * 1000 * 60);

@@ -1,10 +1,11 @@
-package com.securemessaging.sm.attachments;
+package com.securemessaging;
 
+import com.securemessaging.AttachmentManager;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
+import com.securemessaging.sm.attachments.AttachmentPlaceholder;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 

@@ -1,5 +1,6 @@
-package com.securemessaging.sm.notifications;
+package com.securemessaging;
 
+import com.securemessaging.NotificationManager;
 import com.securemessaging.ex.SecureMessengerClientException;
 
 public interface NotificationManagerInterface {

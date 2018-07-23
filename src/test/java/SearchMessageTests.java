@@ -2,7 +2,7 @@ import com.securemessaging.SecureMessenger;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.Credentials;
-import com.securemessaging.sm.Message;
+import com.securemessaging.Message;
 import com.securemessaging.sm.search.SearchMessagesResults;
 import com.securemessaging.sm.search.SearchMessagesFilter;
 import org.junit.jupiter.api.Test;
