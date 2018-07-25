@@ -110,8 +110,11 @@ public class ClientRequestHandler {
                 case GET:
                     return this.restTemplate.getForObject(baseURL + route, responseType, request.getRequestParams());
                 case PUT:
-                    HttpEntity entity = request.getRequestAsEntity();
-                    return this.restTemplate.exchange(baseURL + route, HttpMethod.PUT, entity, responseType, request.getRequestParams()).getBody();
+                    HttpEntity putEntity = request.getRequestAsEntity();
+                    return this.restTemplate.exchange(baseURL + route, HttpMethod.PUT, putEntity, responseType, request.getRequestParams()).getBody();
+                case DELETE:
+                    HttpEntity deleteEntity = request.getRequestAsEntity();
+                    return this.restTemplate.exchange(baseURL + route, HttpMethod.DELETE, deleteEntity, responseType, request.getRequestParams()).getBody();
                 default:
                     throw new SecureMessengerClientException("Request Method Could Not Be Determined For Request");
             }

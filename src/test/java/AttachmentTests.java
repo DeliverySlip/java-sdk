@@ -133,8 +133,298 @@ public class AttachmentTests extends BaseTestCase {
             Assert.fail();
             throw smce;
         }
+    }
+
+    @Test
+    public void testDeleteAttachmentAfterUploadWithGuid()throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException {
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            SavedMessage savedMessage = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
+
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
+
+            manager.addAttachmentFile(file);
+
+            manager.preCreateAllAttachments();
+            manager.uploadAllAttachments();
+
+            List<AttachmentSummary> uploadedAttachments = manager.getAttachmentsInfo();
+            for(AttachmentSummary uploadedAttachment : uploadedAttachments){
+                manager.deleteAttachmentFile(uploadedAttachment.guid);
+            }
+
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
 
 
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            Assert.fail();
+            throw smce;
+        }
+    }
+
+    @Test
+    public void testConvertAttachmentToESigAfterUpload()throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException {
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            SavedMessage savedMessage = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
+
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
+
+            manager.addAttachmentFile(file);
+
+            manager.preCreateAllAttachments();
+            manager.uploadAllAttachments();
+
+            for(AttachmentSummary attachment: manager.getAttachmentsInfo()){
+                Assert.assertTrue(manager.convertAttachmentFileToESignature(attachment.guid));
+            }
+
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            smce.printStackTrace();
+            Assert.fail();
+            throw smce;
+        }
+    }
+
+    @Test
+    public void testConvertAttachmentToESigBeforeUpload()throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException {
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            SavedMessage savedMessage = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
+
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
+
+            manager.addAttachmentFile(file);
+
+            manager.preCreateAllAttachments();
+
+            for(AttachmentSummary attachment: manager.getAttachmentsInfo()){
+                Assert.assertTrue(manager.convertAttachmentFileToESignature(attachment.guid));
+            }
+
+            manager.uploadAllAttachments();
+
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }catch(SecureMessengerException sme){
+            sme.printStackTrace();
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            smce.printStackTrace();
+            Assert.fail();
+            throw smce;
+        }
+    }
+
+    @Test
+    public void testDeleteAttachmentAfterUpload()throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException {
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            SavedMessage savedMessage = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
+
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
+
+            manager.addAttachmentFile(file);
+
+            manager.preCreateAllAttachments();
+            manager.uploadAllAttachments();
+
+
+            manager.deleteAttachmentFile(file);
+
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            smce.printStackTrace();
+            Assert.fail();
+            throw smce;
+        }
+    }
+
+
+    @Test
+    public void testDeleteAttachmentBeforeUpload()throws SecureMessengerException, SecureMessengerClientException,
+            URISyntaxException {
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            SavedMessage savedMessage = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
+
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
+
+            manager.addAttachmentFile(file);
+
+            manager.preCreateAllAttachments();
+            manager.deleteAttachmentFile(file);
+
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            Assert.fail();
+            throw smce;
+        }
+    }
+
+    @Test
+    public void testDeleteAttachmentBeforePreCreate()throws SecureMessengerException, SecureMessengerClientException,
+            URISyntaxException {
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            SavedMessage savedMessage = messenger.saveMessage(message);
+
+            AttachmentManager manager = messenger.createAttachmentManagerForMessage(savedMessage);
+
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
+
+            manager.addAttachmentFile(file);
+            manager.deleteAttachmentFile(file);
+
+            savedMessage = messenger.saveMessage(savedMessage);
+            messenger.sendMessage(savedMessage);
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            Assert.fail();
+            throw smce;
+        }
     }
 
     @Test
