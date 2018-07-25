@@ -5,9 +5,12 @@ import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.AttachmentChunk;
 import com.securemessaging.sm.attachments.*;
+import com.securemessaging.sm.request.DeleteAttachmentRequest;
 import com.securemessaging.sm.request.GetMessageRequest;
+import com.securemessaging.sm.request.PostConvertToESignatureRequest;
 import com.securemessaging.sm.request.PostPreCreateAttachmentsRequest;
 import com.securemessaging.sm.response.GetMessageResponse;
+import com.securemessaging.sm.response.PostConvertToESignatureResponse;
 import com.securemessaging.sm.response.PostPreCreateAttachmentsResponse;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
@@ -72,6 +75,50 @@ public class AttachmentManager implements AttachmentManagerInterface {
 
     public AttachmentManager(SavedMessage savedMessage, ClientRequestHandler client){
         this(savedMessage.message, client);
+    }
+
+    public boolean convertAttachmentFileToESignature(String attachmentGuid)throws SecureMessengerException, SecureMessengerClientException{
+
+        if(this.attachmentsHaveBeenPreCreated){
+            for(AttachmentPlaceholder attachment : preCreateAttachmentsResponse.attachmentPlaceholders){
+                if(attachment.attachmentGuid.equalsIgnoreCase(attachmentGuid)){
+                    PostConvertToESignatureRequest request = new PostConvertToESignatureRequest();
+                    request.attachmentGuid = attachmentGuid;
+
+                    PostConvertToESignatureResponse response = this.client.makeRequest(request.getRequestRoute(), request, PostConvertToESignatureResponse.class);
+                    attachment.attachmentGuid = response.newAttachmentGuid;
+
+                    return true;
+                }
+            }
+        }else{
+            throw new SecureMessengerClientException("Attachments Must All Be PreCreated Before They Can Be Converted To ESignatures");
+        }
+
+        return false;
+    }
+
+    public void deleteAttachmentFile(String attachmentGuid) throws SecureMessengerException, SecureMessengerClientException{
+
+        DeleteAttachmentRequest deleteAttachmentRequest = new DeleteAttachmentRequest();
+        deleteAttachmentRequest.attachmentGuid = attachmentGuid;
+
+        this.client.makeRequest(deleteAttachmentRequest.getRequestRoute(), deleteAttachmentRequest, String.class);
+
+    }
+
+    public void deleteAttachmentFile(File file) throws SecureMessengerException, SecureMessengerClientException{
+        this.attachmentList.remove(file);
+
+        if(this.attachmentsHaveBeenPreCreated){
+
+            for(AttachmentPlaceholder placeholder: this.preCreateAttachmentsResponse.attachmentPlaceholders){
+                if(file.getName().equalsIgnoreCase(placeholder.fileName)){
+                    deleteAttachmentFile(placeholder.attachmentGuid);
+                    break;
+                }
+            }
+        }
     }
 
     /**
