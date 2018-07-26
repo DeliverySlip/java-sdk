@@ -56,5 +56,4 @@ yellow.jpg # don't include the testing data
 src/test/resources/*.properties
 
 # Confirmation required
-LICENSE.md
 CONTRIBUTING.md
