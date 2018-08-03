@@ -14,27 +14,49 @@ public class TestConfiguration {
     public static String resolveUrl;
 
     public static void loadConfiguration() throws IOException {
-        InputStream stream = ClassLoader.getSystemResourceAsStream("unittest.properties");
-        properties.load(stream);
 
-        System.out.println("Enumerating All Keys Found In Properties File");
-        Enumeration<?> e = properties.propertyNames();
-        while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
-            String value = properties.getProperty(key);
-            //NO PASSWORDS IN TERMINAL
-            if(key.toLowerCase().contains("password")){
-                value = "********";
-            }
-            System.out.println("Key: " + key + ", Value: " + value);
+        //try reading environment variables for values
+        if(System.getenv("SM_SERVICE_CODE") != null){
+            System.out.println("SM_SERVICE_CODE Environment Variable Detected. Setting serviceCode Value");
+            serviceCode = System.getenv("SM_SERVICE_CODE");
         }
-        System.out.println("Enumeration Complete. Now Assigning Values");
 
-        serviceCode = properties.getProperty("servicecode");
-        username = properties.getProperty("username");
-        password = properties.getProperty("password");
-        recipientEmail = properties.getProperty("recipientemail");
-        resolveUrl = properties.getProperty("resolveurl");
+        if(System.getenv("SM_USERNAME") != null){
+            System.out.println("SM_USERNAME Environment Variable Detected. Setting username Value");
+            username = System.getenv("SM_USERNAME");
+        }
+
+        if(System.getenv("SM_PASSWORD") != null){
+            System.out.println("SM_PASSWORD Environment Variable Detected. Setting password Value");
+            password = System.getenv("SM_PASSWORD");
+        }
+
+        if(System.getenv("SM_RECIPIENT_EMAIL") != null){
+            System.out.println("SM_RECIPIENT_EMAIL Environment Variable Detected. Setting recipientEmail Value");
+            recipientEmail = System.getenv("SM_RECIPIENT_EMAIL");
+        }
+
+        if(System.getenv("SM_RESOLVE_URL") != null){
+            System.out.println("SM_RESOLVE_URL Environment Variable Detected. Setting resolveUrl Value");
+            resolveUrl = System.getenv("SM_RESOLVE_URL");
+        }
+
+
+
+        try{
+            InputStream stream = ClassLoader.getSystemResourceAsStream("unittest.properties");
+            properties.load(stream);
+
+            serviceCode = properties.getProperty("servicecode");
+            username = properties.getProperty("username");
+            password = properties.getProperty("password");
+            recipientEmail = properties.getProperty("recipientemail");
+            resolveUrl = properties.getProperty("resolveurl");
+        }catch(Exception e){
+            System.out.println("Failed To Grab Settings From unittest.properties File. Tests Will Fail If Environment " +
+                    "Variables Are Not Defined");
+        }
+
     }
 
 
