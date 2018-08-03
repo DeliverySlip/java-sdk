@@ -47,6 +47,7 @@ artifacts{
 }
 
 jar.enabled = false
+bootRepackage.enabled = false
 
 dependencies {
 
