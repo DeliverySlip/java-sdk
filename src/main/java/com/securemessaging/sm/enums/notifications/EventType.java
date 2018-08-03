@@ -1,5 +1,9 @@
 package com.securemessaging.sm.enums.notifications;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.securemessaging.ex.SecureMessengerClientException;
+
 public enum EventType {
     NEWASSETPAYLOAD("NewAssetPayload"), USERTRACKINGPAYLOAD("UserTrackingPayloed");
 
@@ -13,21 +17,28 @@ public enum EventType {
      * getEnumText gets the value of the enum which is required to be passed to the server
      * @return the value of the enum
      */
+    @JsonValue
     public String getEnumText(){
         return this.eventType;
     }
 
-    public static EventType enumFromEnumText(String enumText){
-        if(enumText.equals("NewAssetPayload")){
-            return EventType.NEWASSETPAYLOAD;
-        }else if(enumText.equals("UserTrackingPayload")){
-            return EventType.USERTRACKINGPAYLOAD;
+    @JsonCreator
+    public static EventType enumFromEnumText(String enumText) throws SecureMessengerClientException {
+        for(EventType validEnumValue: EventType.values()){
+            if(enumText.equals(validEnumValue.getEnumText())){
+                return validEnumValue;
+            }
         }
 
-        return null;
+        throw new SecureMessengerClientException("enumText Does Not Match A Valid Enum");
     }
 
     public static boolean isValidEventTypeText(String enumText){
-        return EventType.enumFromEnumText(enumText) != null;
+        try{
+            EventType.enumFromEnumText(enumText);
+            return true;
+        }catch(SecureMessengerClientException smce){
+            return false;
+        }
     }
 }

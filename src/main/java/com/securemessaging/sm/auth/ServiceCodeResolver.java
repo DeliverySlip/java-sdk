@@ -15,11 +15,27 @@ public class ServiceCodeResolver {
     private static String cccBaseURL = Endpoints.CCCAPI;
     private static final String resolveRoute = "/public/services/single";
 
+    private static String versionedRoutesBase = "/v1";
+    private static boolean includeVersionedRoutePathInBaseUrl = true;
+
     public static String resolve(String serviceCode) throws SecureMessengerClientException, SecureMessengerException {
 
         ClientRequestHandler client = new ClientRequestHandler(cccBaseURL);
         PublicGetServiceResponse response = client.makeRequest(resolveRoute + "?serviceCode=" + serviceCode, new PublicGetServiceRequest(), PublicGetServiceResponse.class);
-        return response.urls.SecMsgAPI;
+        if(includeVersionedRoutePathInBaseUrl){
+            return response.urls.SecMsgAPI + versionedRoutesBase;
+        }else{
+            return response.urls.SecMsgAPI;
+        }
+
+    }
+
+    public static void includeVersionedRoutePathInBaseUrl(boolean includeVersionPathInBaseUrl){
+        ServiceCodeResolver.includeVersionedRoutePathInBaseUrl = includeVersionPathInBaseUrl;
+    }
+
+    public static void setApiVersionedRoutesBase(String versionedRouteBase){
+        ServiceCodeResolver.versionedRoutesBase = versionedRouteBase;
     }
 
     public static void setResolverUrl(String resolverURL){

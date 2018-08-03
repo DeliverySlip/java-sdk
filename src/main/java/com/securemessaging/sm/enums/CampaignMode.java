@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.securemessaging.ex.SecureMessengerClientException;
 
-public enum BodyFormat {
-    TEXT("Text"), HTML("Html");
+public enum CampaignMode {
+    AUTOMATIC("Automatic"), MANUAL("Manual");
 
-    private final String bodyFormat;
+    private final String campaignMode;
 
-    BodyFormat(String bodyFormat){
-        this.bodyFormat = bodyFormat;
+    CampaignMode(String campaignMode){
+        this.campaignMode = campaignMode;
     }
 
     /**
@@ -19,12 +19,12 @@ public enum BodyFormat {
      */
     @JsonValue
     public String getEnumText(){
-        return this.bodyFormat;
+        return this.campaignMode;
     }
 
     @JsonCreator
-    public static BodyFormat enumFromEnumText(String enumText) throws SecureMessengerClientException {
-        for(BodyFormat validEnumValue: BodyFormat.values()){
+    public static CampaignMode enumFromEnumText(String enumText) throws SecureMessengerClientException {
+        for(CampaignMode validEnumValue: CampaignMode.values()){
             if(enumText.equals(validEnumValue.getEnumText())){
                 return validEnumValue;
             }
@@ -32,5 +32,4 @@ public enum BodyFormat {
 
         throw new SecureMessengerClientException("enumText Does Not Match A Valid Enum");
     }
-
 }

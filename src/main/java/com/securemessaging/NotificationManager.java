@@ -238,7 +238,17 @@ public class NotificationManager implements NotificationManagerInterface {
                 public void onEvent(String channelName, String eventName, String data) {
 
                     if(EventType.isValidEventTypeText(eventName)){
-                        EventType eventType = EventType.enumFromEnumText(eventName);
+
+                        EventType eventType;
+                        try{
+                            eventType = EventType.enumFromEnumText(eventName);
+                        }catch(SecureMessengerClientException smce){
+                            onNotificationEventListener.onNotificationEventError(null, data, new SecureMessengerClientException(
+                                    "An Event Type Failed To Be Parsed By The Enum. Can't Process Event ( EventName: "
+                                            + eventName)
+                            );
+                            return;
+                        }
 
                         ObjectMapper mapper = new ObjectMapper();
 

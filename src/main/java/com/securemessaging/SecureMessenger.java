@@ -44,6 +44,8 @@ public class SecureMessenger implements SecureMessengerInterface {
 
     private ClientRequestHandler client;
 
+    private Session session;
+
     public static SecureMessenger resolveViaServiceCode(String serviceCode) throws SecureMessengerClientException, SecureMessengerException{
 
         try{
@@ -53,11 +55,15 @@ public class SecureMessenger implements SecureMessengerInterface {
                 baseURL = baseURL.substring(0, baseURL.length() - 1);
             }
 
-            SecureMessenger messenger = new SecureMessenger(baseURL + "/v1");
-            return messenger;
+            return new SecureMessenger(baseURL);
         }catch(SecureMessengerClientException smce){
             throw new SecureMessengerClientException("The ServiceCode Provided Is Invalid");
         }
+    }
+
+    public SecureMessenger(Session session){
+        this.session = session;
+        this.client = session.client;
     }
 
 
@@ -70,9 +76,11 @@ public class SecureMessenger implements SecureMessengerInterface {
         this.client = new ClientRequestHandler(baseURL);
     }
 
+
     public SecureMessenger(ClientRequestHandler client){
         this.client = client;
     }
+
 
     public void setClientName(String clientName){
         this.client.setClientName(clientName);
@@ -90,10 +98,14 @@ public class SecureMessenger implements SecureMessengerInterface {
      * Login allows the user to authenticate with the Messaging API by passing a credentials object. The SecureMessenger
      * then manages the auth token, required as a header, returned by sending it to the authInterceptor
      */
-    public void login(SMAuthenticationInterface authentication) throws SecureMessengerException, SecureMessengerClientException{
+    public Session login(SMAuthenticationInterface authentication) throws SecureMessengerException, SecureMessengerClientException{
 
         Session session = SessionFactory.createSession(authentication, this.client);
+
+        session.client = this.client;
         this.client.setSession(session);
+
+        return session;
     }
 
     public Message preCreateMessage(PreCreateConfiguration preCreateConfiguration)throws SecureMessengerException, SecureMessengerClientException{

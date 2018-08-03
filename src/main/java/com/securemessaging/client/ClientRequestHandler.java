@@ -126,21 +126,24 @@ public class ClientRequestHandler {
             try{
                 ObjectMapper mapper = new ObjectMapper();
                 ResponseStatus error = mapper.readValue(body, ResponseStatus.class);
-                throw new SecureMessengerException(error, hsee.getRawStatusCode(), hsee.getResponseBodyAsString());
+
+                throw new SecureMessengerException(error, hsee.getRawStatusCode(), hsee.getResponseBodyAsString(),
+                        request.getRequestMethod(), baseURL + route);
+
             }catch(IOException ioe){
                 //do nothing so as to stick with default implementation
                 throw new SecureMessengerClientException(ioe.getMessage());
             }
 
         }catch(HttpClientErrorException hcee){
-            String body = hcee.getResponseBodyAsString();
-            System.out.println(body);
+            System.out.println(hcee.getResponseBodyAsString());
             System.out.println(hcee.getResponseHeaders().toString());
 
             try{
                 ObjectMapper mapper = new ObjectMapper();
-                ResponseStatus error = mapper.readValue(body, ResponseStatus.class);
-                throw new SecureMessengerException(error, hcee.getRawStatusCode(), hcee.getResponseBodyAsString());
+                ResponseStatus error = mapper.readValue(hcee.getResponseBodyAsString(), ResponseStatus.class);
+                throw new SecureMessengerException(error, hcee.getRawStatusCode(), hcee.getResponseBodyAsString(),
+                        request.getRequestMethod(), baseURL + route);
             }catch(IOException ioe){
                 //do nothing so as to stick with default implementation
                 throw new SecureMessengerClientException(ioe.getMessage());

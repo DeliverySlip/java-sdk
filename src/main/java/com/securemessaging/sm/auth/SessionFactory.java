@@ -29,6 +29,7 @@ public class SessionFactory {
         session.lastName = settingsResponse.lastName;
         session.emailAddress = settingsResponse.emailAddress;
         session.state = settingsResponse.state;
+        session.client = client;
 
         return session;
     }

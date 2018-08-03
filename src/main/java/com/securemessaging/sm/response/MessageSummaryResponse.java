@@ -3,6 +3,8 @@ package com.securemessaging.sm.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.securemessaging.sm.attachments.AttachmentSummary;
+import com.securemessaging.sm.enums.BodyFormat;
+import com.securemessaging.sm.enums.FyeoType;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ public class MessageSummaryResponse {
 
     public String subject;
     public String body;
-    public String bodyFormat; // convert this to BodyFormat Enum
+    public BodyFormat bodyFormat; // convert this to BodyFormat Enum
 
     public User sender;
     //public String replyTo;
@@ -49,7 +51,7 @@ public class MessageSummaryResponse {
         public boolean allowForward = true;
         public boolean allowReply = true;
         public boolean allowTracking = true;
-        public String fyeoType; //convert this to FYEOType Enum
+        public FyeoType fyeoType; //convert this to FYEOType Enum
         public boolean shareTracking = true;
     }
 
