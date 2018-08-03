@@ -2,7 +2,6 @@ package com.securemessaging.sm.request;
 
 import com.securemessaging.SMRequestInterface;
 import com.securemessaging.sm.enums.SMRequestMethod;
-import javafx.util.Pair;
 import org.springframework.http.HttpEntity;
 
 import java.util.HashMap;
