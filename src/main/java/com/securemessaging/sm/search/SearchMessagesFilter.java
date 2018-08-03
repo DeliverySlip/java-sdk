@@ -8,7 +8,7 @@ import com.securemessaging.sm.enums.MessageBoxType;
 public class SearchMessagesFilter {
 
     private String searchCriteria = "";
-    private String types = "Inbox";
+    private MessageBoxType types = MessageBoxType.INBOX;
     private int pageSize = 25;
     private int page = 1;
 
@@ -33,7 +33,7 @@ public class SearchMessagesFilter {
     }
 
     public void setMessageBoxType(MessageBoxType messageBoxType){
-        this.types = messageBoxType.getEnumText();
+        this.types = messageBoxType;
     }
 
     public String getSearchCriteria(){
@@ -41,6 +41,6 @@ public class SearchMessagesFilter {
     }
 
     public MessageBoxType getMessageBoxType(){
-        return MessageBoxType.enumFromEnumText(this.types);
+        return this.types;
     }
 }

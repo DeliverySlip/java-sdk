@@ -12,7 +12,7 @@ public class PreCreateConfiguration {
 
 
     //request
-    private String actionCode;
+    private ActionCode actionCode;
     private String parentGuid;
     private String password;
 
@@ -23,11 +23,11 @@ public class PreCreateConfiguration {
      * @param actionCode the actionCode enum value
      */
     public void setActionCode(ActionCode actionCode){
-        this.actionCode = actionCode.getEnumText();
+        this.actionCode = actionCode;
     }
 
     public ActionCode getActionCode(){
-        return ActionCode.enumFromEnumText(this.actionCode);
+        return this.actionCode;
     }
 
     /**

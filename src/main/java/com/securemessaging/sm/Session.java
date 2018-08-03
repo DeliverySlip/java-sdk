@@ -1,6 +1,7 @@
 package com.securemessaging.sm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.securemessaging.client.ClientRequestHandler;
 import lombok.Data;
 
 @Data
@@ -15,4 +16,13 @@ public class Session {
     public String lastName;
     public String state;
     public String emailAddress;
+    public ClientRequestHandler client;
+
+
+    //logout
+    /*
+    public void logout(){
+
+    }
+     */
 }

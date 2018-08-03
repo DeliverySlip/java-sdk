@@ -1,5 +1,12 @@
 package com.securemessaging.sm.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.securemessaging.ex.SecureMessengerClientException;
+
+import javax.swing.*;
+import java.security.InvalidParameterException;
+
 public enum ActionCode {
     NEW("New"), REPLY("Reply"), REPLYALL("ReplyAll"), FORWARD("Forward");
 
@@ -9,20 +16,19 @@ public enum ActionCode {
         this.actionCode = actionCode;
     }
 
+    @JsonValue
     public String getEnumText(){
         return this.actionCode;
     }
 
-    public static ActionCode enumFromEnumText(String enumText){
-        if(enumText.equals("New")){
-            return ActionCode.NEW;
-        }else if(enumText.equals("Reply")){
-            return ActionCode.REPLY;
-        }else if(enumText.equals("ReplyAll")){
-            return ActionCode.REPLYALL;
-        }else if(enumText.equals("Forward")){
-            return ActionCode.FORWARD;
+    @JsonCreator
+    public static ActionCode enumFromEnumText(String enumText) throws SecureMessengerClientException {
+        for(ActionCode validEnumValue: ActionCode.values()){
+            if(enumText.equals(validEnumValue.getEnumText())){
+                return validEnumValue;
+            }
         }
-        return null;
+
+        throw new SecureMessengerClientException("enumText Does Not Match A Valid Enum");
     }
 }

@@ -1,6 +1,10 @@
 package com.securemessaging.sm.enums;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.securemessaging.ex.SecureMessengerClientException;
+
 public enum MessageBoxType {
     DRAFT("Draft"), INBOX("Inbox"), SENT("Sent"), TRASH("Trash");
 
@@ -14,20 +18,19 @@ public enum MessageBoxType {
      * getEnumText gets the value of the enum which is required to be passed to the server
      * @return the value of the enum
      */
+    @JsonValue
     public String getEnumText(){
         return this.messageBoxType;
     }
 
-    public static MessageBoxType enumFromEnumText(String enumText){
-        if(enumText.equals("Draft")){
-            return MessageBoxType.DRAFT;
-        }else if(enumText.equals("Inbox")){
-            return MessageBoxType.INBOX;
-        }else if(enumText.equals("Sent")){
-            return MessageBoxType.SENT;
-        }else if(enumText.equals("Trash")){
-            return MessageBoxType.TRASH;
+    @JsonCreator
+    public static MessageBoxType enumFromEnumText(String enumText) throws SecureMessengerClientException {
+        for(MessageBoxType validEnumValue: MessageBoxType.values()){
+            if(enumText.equals(validEnumValue.getEnumText())){
+                return validEnumValue;
+            }
         }
-        return null;
+
+        throw new SecureMessengerClientException("enumText Does Not Match A Valid Enum");
     }
 }

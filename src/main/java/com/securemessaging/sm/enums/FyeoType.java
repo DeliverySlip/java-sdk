@@ -1,5 +1,9 @@
 package com.securemessaging.sm.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.securemessaging.ex.SecureMessengerClientException;
+
 public enum FyeoType {
     DISABLED("Disabled"), ACCOUNTPASSWORD("AccountPassword"), UNIQUEPASSWORD("UniquePassword");
 
@@ -13,19 +17,20 @@ public enum FyeoType {
      * getEnumText gets the value of the enum which is required to be passed to the server
      * @return the value of the enum
      */
+    @JsonValue
     public String getEnumText(){
         return this.fyeoType;
     }
 
-    public static FyeoType enumFromEnumText(String enumText){
-        if(enumText.equals("Disabled")){
-            return FyeoType.DISABLED;
-        }else if(enumText.equals("AccountPassword")){
-            return FyeoType.ACCOUNTPASSWORD;
-        }else if(enumText.equals("UniquePassword")){
-            return FyeoType.UNIQUEPASSWORD;
+    @JsonCreator
+    public static FyeoType enumFromEnumText(String enumText) throws SecureMessengerClientException {
+        for(FyeoType validEnumValue: FyeoType.values()){
+            if(enumText.equals(validEnumValue.getEnumText())){
+                return validEnumValue;
+            }
         }
-        return null;
+
+        throw new SecureMessengerClientException("enumText Does Not Match A Valid Enum");
     }
 
 }

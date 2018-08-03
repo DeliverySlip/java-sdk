@@ -4,10 +4,27 @@ import com.securemessaging.client.ClientRequestHandler;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.Credentials;
+import com.securemessaging.sm.Session;
 import com.securemessaging.sm.auth.ServiceCodeResolver;
+import com.securemessaging.sm.auth.SessionFactory;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.ws.Service;
+
 public class LoginTests extends BaseTestCase {
+
+    @Test
+    public void testLoginMostDecoupled() throws SecureMessengerException, SecureMessengerClientException {
+
+        String messagingApiUrl = ServiceCodeResolver.resolve(serviceCode);
+        ClientRequestHandler client = new ClientRequestHandler(messagingApiUrl);
+
+        Credentials credentials = new Credentials(username, password);
+        Session session = SessionFactory.createSession(credentials, client);
+
+        SecureMessenger messenger = new SecureMessenger(session);
+    }
+
 
     @Test
     public void testBasicLogin()throws SecureMessengerException, SecureMessengerClientException{

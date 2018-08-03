@@ -1,5 +1,9 @@
 package com.securemessaging.sm.enums.notifications;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.securemessaging.ex.SecureMessengerClientException;
+
 public enum SubscriptionType {
     MESSAGE("Message"), ATTACHMENT("Attachment");
 
@@ -13,17 +17,19 @@ public enum SubscriptionType {
      * getEnumText gets the value of the enum which is required to be passed to the server
      * @return the value of the enum
      */
+    @JsonValue
     public String getEnumText(){
         return this.newAssetNotificationFilter;
     }
 
-    public static SubscriptionType enumFromEnumText(String enumText){
-        if(enumText.equals("Message")){
-            return SubscriptionType.MESSAGE;
-        }else if(enumText.equals("Attatchment")){
-            return SubscriptionType.ATTACHMENT;
+    @JsonCreator
+    public static SubscriptionType enumFromEnumText(String enumText) throws SecureMessengerClientException {
+        for(SubscriptionType validEnumValue: SubscriptionType.values()){
+            if(enumText.equals(validEnumValue.getEnumText())){
+                return validEnumValue;
+            }
         }
 
-        return null;
+        throw new SecureMessengerClientException("enumText Does Not Match A Valid Enum");
     }
 }

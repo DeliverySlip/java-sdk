@@ -3,6 +3,7 @@ package com.securemessaging;
 import com.securemessaging.ex.SecureMessengerClientException;
 import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.PreCreateConfiguration;
+import com.securemessaging.sm.Session;
 import com.securemessaging.sm.auth.SMAuthenticationInterface;
 import com.securemessaging.sm.search.SearchMessagesFilter;
 import com.securemessaging.sm.search.SearchMessagesResults;
@@ -18,7 +19,7 @@ public interface SecureMessengerInterface {
 
     String getClientVersion();
 
-    void login(SMAuthenticationInterface authentication) throws SecureMessengerException, SecureMessengerClientException;
+    Session login(SMAuthenticationInterface authentication) throws SecureMessengerException, SecureMessengerClientException;
 
     Message preCreateMessage(PreCreateConfiguration preCreateConfiguration) throws SecureMessengerException, SecureMessengerClientException;
 

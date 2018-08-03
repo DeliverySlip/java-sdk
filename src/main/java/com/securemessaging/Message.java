@@ -20,7 +20,7 @@ public class Message {
     private String[] bcc;
     private String subject;
     private String body;
-    private String bodyFormat = BodyFormat.TEXT.getEnumText();
+    private BodyFormat bodyFormat = BodyFormat.TEXT;
 
     private Options messageOptions = new Options();
 
@@ -29,7 +29,7 @@ public class Message {
         private boolean allowForward = true;
         private boolean allowReply = true;
         private boolean allowTracking = true;
-        private String fyeoType = FyeoType.DISABLED.getEnumText();
+        private FyeoType fyeoType = FyeoType.DISABLED;
         private boolean shareTracking = true;
     }
 
@@ -127,11 +127,11 @@ public class Message {
      * @param bodyFormat BodyFormat the bodyFormat enum of HTML or TXT
      */
     public void setBodyFormat(BodyFormat bodyFormat){
-        this.bodyFormat = bodyFormat.getEnumText();
+        this.bodyFormat = bodyFormat;
     }
 
     public BodyFormat getBodyFormat(){
-        return BodyFormat.enumFromEnumText(this.bodyFormat);
+        return this.bodyFormat;
     }
 
     /**
@@ -190,11 +190,11 @@ public class Message {
      * @param type FyeoType the FyeoType enum representing the FyeoType
      */
     public void setFyeoType(FyeoType type){
-        this.messageOptions.fyeoType = type.getEnumText();
+        this.messageOptions.fyeoType = type;
     }
 
     public FyeoType getFyeoType(){
-        return FyeoType.enumFromEnumText(this.messageOptions.fyeoType);
+        return this.messageOptions.fyeoType;
     }
 
     public void setCraCode(String craCode){
