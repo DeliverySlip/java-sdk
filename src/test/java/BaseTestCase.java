@@ -41,16 +41,5 @@ public class BaseTestCase{
                     "Endpoint");
             ServiceCodeResolver.setResolverUrl(TestConfiguration.resolveUrl);
         }
-
-
-        System.out.println("Test Settings Loaded Successfully. They Are Set As Follows");
-        System.out.println("Service Code: " + this.serviceCode);
-        System.out.println("Username: " + this.username);
-        System.out.println("Password: ********");
-        System.out.println("Recipient Email: " + this.recipientEmail);
-        System.out.println("Resolve URL: "  + TestConfiguration.resolveUrl);
-        System.out.println("Setup Complete. Now Running Tests");
-
-
     }
 }

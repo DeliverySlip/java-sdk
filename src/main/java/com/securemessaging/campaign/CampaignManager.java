@@ -41,7 +41,6 @@ public class CampaignManager {
         PostCreateCampaignResponse createCampaignResponse = session.client.makeRequest(createCampaignRequest.getRequestRoute(), createCampaignRequest, PostCreateCampaignResponse.class);
 
         ArrayList<String> campaignGuids = new ArrayList<String>();
-        System.out.println("Created Campaign: " + createCampaignResponse.campaignGuid);
         campaignGuids.add(createCampaignResponse.campaignGuid);
 
         GetSearchCampaignsRequest request = new GetSearchCampaignsRequest();

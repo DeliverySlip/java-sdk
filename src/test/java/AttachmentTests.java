@@ -9,6 +9,8 @@ import com.securemessaging.sm.attachments.AttachmentPlaceholder;
 import com.securemessaging.sm.attachments.AttachmentSummary;
 import com.securemessaging.sm.enums.BodyFormat;
 import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -76,6 +78,7 @@ public class AttachmentTests extends BaseTestCase {
     }
 
     @Test
+    @Disabled
     public void testUploadAndDownloadOfStream() throws FileNotFoundException, URISyntaxException, IOException,
             SecureMessengerException, SecureMessengerClientException{
 
@@ -240,6 +243,7 @@ public class AttachmentTests extends BaseTestCase {
     }
 
     @Test
+    @Disabled
     public void testConvertAttachmentToESigBeforeUpload()throws SecureMessengerException, SecureMessengerClientException,
             IOException, URISyntaxException {
 
