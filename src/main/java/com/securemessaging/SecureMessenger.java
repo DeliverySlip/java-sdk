@@ -271,7 +271,6 @@ public class SecureMessenger implements SecureMessengerInterface {
      * @param savedMessage SavedMessage - the message object to be sent that has been saved
      */
     public void sendMessage(SavedMessage savedMessage) throws SecureMessengerClientException, SecureMessengerException{
-
         Message email = savedMessage.message;
 
         //TODO: This is redundant now
