@@ -15,10 +15,11 @@ import java.util.Map;
 public class DeleteAttachmentRequest implements SMRequestInterface {
 
     public String attachmentGuid;
+    public String messageGuid;
 
     @Override
     public String getRequestRoute() {
-        return "/attachments/" + this.attachmentGuid;
+        return "/messages/" + this.messageGuid + "/attachments/" + this.attachmentGuid;
     }
 
     @Override

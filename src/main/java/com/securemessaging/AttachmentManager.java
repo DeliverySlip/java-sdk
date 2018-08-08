@@ -102,6 +102,7 @@ public class AttachmentManager implements AttachmentManagerInterface {
 
         DeleteAttachmentRequest deleteAttachmentRequest = new DeleteAttachmentRequest();
         deleteAttachmentRequest.attachmentGuid = attachmentGuid;
+        deleteAttachmentRequest.messageGuid = this.message.getMessageGuid();
 
         this.client.makeRequest(deleteAttachmentRequest.getRequestRoute(), deleteAttachmentRequest, String.class);
 
