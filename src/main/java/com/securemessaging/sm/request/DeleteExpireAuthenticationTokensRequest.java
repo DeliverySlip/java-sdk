@@ -1,6 +1,7 @@
 package com.securemessaging.sm.request;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.securemessaging.SMRequestInterface;
 import com.securemessaging.sm.enums.SMRequestMethod;
@@ -30,6 +31,7 @@ public class DeleteExpireAuthenticationTokensRequest implements SMRequestInterfa
     }
 
     @Override
+    @JsonIgnore
     public HttpEntity<?> getRequestAsEntity() {
         return new HttpEntity<DeleteExpireAuthenticationTokensRequest>(this);
     }

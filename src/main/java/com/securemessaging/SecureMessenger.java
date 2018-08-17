@@ -156,6 +156,7 @@ public class SecureMessenger implements SecureMessengerInterface {
         GetMessageRequest request = new GetMessageRequest();
         request.messageGuid = messageGuid;
 
+
         GetMessageResponse response = client.makeRequest(request.getRequestRoute(), request, GetMessageResponse.class);
 
         Message message = SMConverter.convertMessageSummaryToMessage(response);
