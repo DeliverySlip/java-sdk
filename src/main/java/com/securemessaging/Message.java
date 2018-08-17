@@ -2,7 +2,9 @@ package com.securemessaging;
 import com.securemessaging.sm.enums.BodyFormat;
 import com.securemessaging.sm.enums.FyeoType;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
 
     //meta information for the client SDK
     public boolean hasBeenSaved = false;
@@ -24,7 +26,7 @@ public class Message {
 
     private Options messageOptions = new Options();
 
-    private class Options {
+    private class Options implements Serializable{
         /* Set default values for message */
         private boolean allowForward = true;
         private boolean allowReply = true;
