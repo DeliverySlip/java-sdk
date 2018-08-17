@@ -84,3 +84,4 @@ This will execute all the setup unit tests and produce a report within the `buil
 * July 12, 2018 - Release of the Java client is just underway. The current code is stable but the priority is currently
 on documentation of the code and repository to improve ease of access and involvement by others.
 More to come!
+* August 3, 2018 - Release 3.4.0.
