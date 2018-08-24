@@ -22,7 +22,6 @@ public class SearchMessagesResults implements Iterable<Message>, Collection<Mess
 
     private int totalItems;
 
-
     private List<Message> localMessageStore = new ArrayList<Message>();
 
     public SearchMessagesResults(GetSearchMessagesResponse initialData, SearchMessagesFilter searchMessageFilter, ClientRequestHandler client){
