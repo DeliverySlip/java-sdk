@@ -432,6 +432,91 @@ public class AttachmentTests extends BaseTestCase {
     }
 
     @Test
+    public void testSendAttachmentMessengerWorflowMultipleMessages() throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException{
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            for(int i = 0 ; i < 5; i++){
+                Message message = messenger.preCreateMessage();
+
+                message.setTo(new String[]{recipientEmail});
+                message.setSubject("DeliverySlip Java Example");
+
+                message.setBody("Hello Test Message From DeliverySlip Java Example");
+                message.setBodyFormat(BodyFormat.TEXT);
+
+                SavedMessage savedMessage = messenger.saveMessage(message);
+
+                URL resource = ClassLoader.getSystemResource("yellow.jpg");
+                File file = new File(resource.toURI());
+
+                messenger.uploadAttachmentsForMessage(message, new File[]{file});
+
+                savedMessage = messenger.saveMessage(message);
+                messenger.sendMessage(savedMessage);
+            }
+
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            Assert.fail();
+            throw smce;
+        }
+    }
+
+    @Test
+    public void testSendMultipleAttachmentsMessengerWorkflow()throws SecureMessengerException, SecureMessengerClientException,
+            IOException, URISyntaxException {
+
+        try{
+            SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+            Credentials credentials = new Credentials(username, password);
+            messenger.login(credentials);
+
+            Message message = messenger.preCreateMessage();
+
+            message.setTo(new String[]{recipientEmail});
+            message.setSubject("DeliverySlip Java Example");
+
+            message.setBody("Hello Test Message From DeliverySlip Java Example");
+            message.setBodyFormat(BodyFormat.TEXT);
+
+            SavedMessage savedMessage = messenger.saveMessage(message);
+
+            URL resource = ClassLoader.getSystemResource("yellow.jpg");
+            File file = new File(resource.toURI());
+
+            messenger.uploadAttachmentsForMessage(message, new File[]{file, file, file});
+
+            savedMessage = messenger.saveMessage(message);
+            messenger.sendMessage(savedMessage);
+        }catch(URISyntaxException use){
+            Assert.fail();
+            throw use;
+        }catch(IOException ioe){
+            Assert.fail();
+            throw ioe;
+        }catch(SecureMessengerException sme){
+            Assert.fail();
+            throw sme;
+        }catch(SecureMessengerClientException smce){
+            Assert.fail();
+            throw smce;
+        }
+    }
+
+    @Test
     public void testSendAttachmentMessengerWorkflow()throws SecureMessengerException, SecureMessengerClientException,
             IOException, URISyntaxException {
 
@@ -582,7 +667,6 @@ public class AttachmentTests extends BaseTestCase {
     @Test
     public void testAttachmentManagerUploadAndDownloadAllAttachments() throws SecureMessengerException, SecureMessengerClientException,
             IOException, URISyntaxException{
-
 
         try{
             SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);

@@ -155,7 +155,7 @@ public class AttachmentManager implements AttachmentManagerInterface {
             oStream.close();
 
             File newFile = new File(tempFile.getParent(), fileName);
-            if(!newFile.delete()){
+            if(newFile.exists() && !newFile.delete()){
                 //failed to delete means there are files with duplicate names being uploaded - the temp folder
                 //has multiple of the same file in it and are conflicting
                 tempFile.delete();
