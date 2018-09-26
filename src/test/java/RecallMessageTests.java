@@ -5,16 +5,17 @@ import com.securemessaging.ex.SecureMessengerException;
 import com.securemessaging.sm.Credentials;
 import com.securemessaging.Message;
 import com.securemessaging.sm.PreCreateConfiguration;
+import com.securemessaging.sm.RecallMessageConfiguration;
 import com.securemessaging.sm.enums.ActionCode;
 import com.securemessaging.sm.enums.BodyFormat;
 import com.securemessaging.sm.enums.FyeoType;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-public class SendMessageTests extends BaseTestCase{
+public class RecallMessageTests extends BaseTestCase {
 
     @Test
-    public void testSendBasicMessage() throws SecureMessengerException, SecureMessengerClientException {
+    public void testRecallSendBasicMessage() throws SecureMessengerException, SecureMessengerClientException {
 
         try{
             SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
@@ -31,6 +32,13 @@ public class SendMessageTests extends BaseTestCase{
 
             SavedMessage savedMessage = messenger.saveMessage(message);
             messenger.sendMessage(savedMessage);
+
+            RecallMessageConfiguration configuration = new RecallMessageConfiguration(message.getMessageGuid());
+            configuration.setRecallReason("My Recall Reason");
+
+            messenger.recallMessage(configuration);
+
+
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -42,7 +50,7 @@ public class SendMessageTests extends BaseTestCase{
     }
 
     @Test
-    public void testSendBasicMessage2() throws SecureMessengerException, SecureMessengerClientException {
+    public void testRecallSendBasicMessage2() throws SecureMessengerException, SecureMessengerClientException {
 
         try{
             SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
@@ -61,6 +69,12 @@ public class SendMessageTests extends BaseTestCase{
 
             SavedMessage savedMessage = messenger.saveMessage(message);
             messenger.sendMessage(savedMessage);
+
+            RecallMessageConfiguration configuration = new RecallMessageConfiguration(message.getMessageGuid());
+            configuration.setRecallReason("My Recall Reason");
+
+            messenger.recallMessage(configuration);
+
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -72,7 +86,7 @@ public class SendMessageTests extends BaseTestCase{
     }
 
     @Test
-    public void testSendFYEOMessageAccountPassword() throws SecureMessengerClientException, SecureMessengerException {
+    public void testRecallSendFYEOMessageAccountPassword() throws SecureMessengerClientException, SecureMessengerException {
 
 
         try{
@@ -93,6 +107,12 @@ public class SendMessageTests extends BaseTestCase{
 
             SavedMessage savedMessage = messenger.saveMessage(message);
             messenger.sendMessage(savedMessage);
+
+            RecallMessageConfiguration configuration = new RecallMessageConfiguration(message.getMessageGuid());
+            configuration.setRecallReason("My Recall Reason");
+
+            messenger.recallMessage(configuration);
+
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -104,7 +124,7 @@ public class SendMessageTests extends BaseTestCase{
     }
 
     @Test
-    public void testSendMessageWithCRA()  throws SecureMessengerClientException, SecureMessengerException{
+    public void testRecallSendMessageWithCRA()  throws SecureMessengerClientException, SecureMessengerException{
 
         try{
             SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
@@ -126,6 +146,11 @@ public class SendMessageTests extends BaseTestCase{
             SavedMessage savedMessage = messenger.saveMessage(message);
             messenger.sendMessage(savedMessage);
 
+            RecallMessageConfiguration configuration = new RecallMessageConfiguration(message.getMessageGuid());
+            configuration.setRecallReason("My Recall Reason");
+
+            messenger.recallMessage(configuration);
+
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -133,12 +158,10 @@ public class SendMessageTests extends BaseTestCase{
             Assert.fail();
             throw smce;
         }
-
-
     }
 
     @Test
-    public void testSendFYEOMessageUniquePassword() throws SecureMessengerClientException, SecureMessengerException {
+    public void testRecallSendFYEOMessageUniquePassword() throws SecureMessengerClientException, SecureMessengerException {
 
 
         try{
@@ -159,6 +182,13 @@ public class SendMessageTests extends BaseTestCase{
 
             SavedMessage savedMessage = messenger.saveMessage(message);
             messenger.sendMessage(savedMessage);
+
+            RecallMessageConfiguration configuration = new RecallMessageConfiguration(message.getMessageGuid());
+            configuration.setRecallReason("My Recall Reason");
+
+            messenger.recallMessage(configuration);
+
+
         }catch(SecureMessengerException sme){
             Assert.fail();
             throw sme;
@@ -169,6 +199,4 @@ public class SendMessageTests extends BaseTestCase{
 
 
     }
-
-
 }

@@ -13,7 +13,11 @@ import java.util.Map;
  */
 public interface SMRequestInterface {
 
+
+
     String getRequestRoute();
+
+    boolean requestRouteHasApiPath();
 
    Map<String,String> getRequestParams();
 

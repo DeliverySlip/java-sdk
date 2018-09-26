@@ -1,5 +1,6 @@
 package com.securemessaging.sm.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.securemessaging.SMRequestInterface;
 import com.securemessaging.sm.enums.SMRequestMethod;
 import org.springframework.http.HttpEntity;
@@ -17,6 +18,11 @@ public class GetMessageRequest implements SMRequestInterface {
     }
 
     @Override
+    public boolean requestRouteHasApiPath() {
+        return false;
+    }
+
+    @Override
     public Map<String,String> getRequestParams() {
         return new HashMap<String, String>();
     }
@@ -27,6 +33,7 @@ public class GetMessageRequest implements SMRequestInterface {
     }
 
     @Override
+    @JsonIgnore
     public HttpEntity<?> getRequestAsEntity() {
         return new HttpEntity<GetMessageRequest>(this);
     }

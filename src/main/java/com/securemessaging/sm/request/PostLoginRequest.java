@@ -23,6 +23,11 @@ public class PostLoginRequest implements SMRequestInterface {
     }
 
     @Override
+    public boolean requestRouteHasApiPath() {
+        return false;
+    }
+
+    @Override
     public Map<String,String> getRequestParams() {
         return new HashMap<String, String>();
     }

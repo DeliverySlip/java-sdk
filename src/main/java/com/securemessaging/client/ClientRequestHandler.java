@@ -61,7 +61,6 @@ public class ClientRequestHandler {
         // Add the message converters to the restTemplate
         restTemplate.setMessageConverters(messageConverters);
 
-
         if(onProxyInterceptionEventListenerInterface == null) {
             proxyInterceptor.setOnRequestInterceptionEventHandler(null);
         }else{
@@ -104,20 +103,30 @@ public class ClientRequestHandler {
      */
     public <T> T makeRequest(String route, SMRequestInterface request, Class<T> responseType) throws SecureMessengerClientException, SecureMessengerException{
         try{
+
+            String localBaseUrl = baseURL;
+            if (request.requestRouteHasApiPath()){
+                int apiPathIndex = localBaseUrl.indexOf("/api");
+                if(apiPathIndex > -1){ // -1 is returned if /api is not in the path
+                    localBaseUrl = localBaseUrl.substring(0, apiPathIndex);
+                }
+            }
+
             switch(request.getRequestMethod()){
                 case POST:
-                    return this.restTemplate.postForObject(baseURL + route, request, responseType, request.getRequestParams());
+                    return this.restTemplate.postForObject(localBaseUrl + route, request, responseType, request.getRequestParams());
                 case GET:
-                    return this.restTemplate.getForObject(baseURL + route, responseType, request.getRequestParams());
+                    return this.restTemplate.getForObject(localBaseUrl + route, responseType, request.getRequestParams());
                 case PUT:
                     HttpEntity putEntity = request.getRequestAsEntity();
-                    return this.restTemplate.exchange(baseURL + route, HttpMethod.PUT, putEntity, responseType, request.getRequestParams()).getBody();
+                    return this.restTemplate.exchange(localBaseUrl + route, HttpMethod.PUT, putEntity, responseType, request.getRequestParams()).getBody();
                 case DELETE:
                     HttpEntity deleteEntity = request.getRequestAsEntity();
-                    return this.restTemplate.exchange(baseURL + route, HttpMethod.DELETE, deleteEntity, responseType, request.getRequestParams()).getBody();
+                    return this.restTemplate.exchange(localBaseUrl + route, HttpMethod.DELETE, deleteEntity, responseType, request.getRequestParams()).getBody();
                 default:
                     throw new SecureMessengerClientException("Request Method Could Not Be Determined For Request");
             }
+
         }catch(HttpServerErrorException hsee){
             System.out.println(hsee.getResponseBodyAsString());
             System.out.println(hsee.getResponseHeaders().toString());
