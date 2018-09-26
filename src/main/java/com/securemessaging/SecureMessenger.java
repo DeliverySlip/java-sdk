@@ -163,6 +163,27 @@ public class SecureMessenger implements SecureMessengerInterface {
         return message;
     }
 
+    public void recallMessage(RecallMessageConfiguration configuration) throws SecureMessengerException, SecureMessengerClientException{
+
+        PostRecallMessageRequest request = new PostRecallMessageRequest();
+        request.messageGuid = configuration.getMessageGuid();
+        request.recallReason = configuration.getRecallReason();
+        request.singleRecall = configuration.getSingleRecall();
+        request.unshareAttachments = configuration.getUnshareAttachments();
+
+        String response = client.makeRequest(request.getRequestRoute(), request, String.class);
+    }
+
+    public GetPingResponse ping() throws SecureMessengerException, SecureMessengerClientException {
+
+        GetPingRequest request = new GetPingRequest();
+        GetPingResponse response = client.makeRequest(request.getRequestRoute(), request, GetPingResponse.class);
+
+        return response;
+    }
+
+
+
     /**
      * searchMessages uses the passed in filter and calls a search
      * @param searchMessagesFilter - the filter defining parameters to search by

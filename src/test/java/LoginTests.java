@@ -7,11 +7,22 @@ import com.securemessaging.sm.Credentials;
 import com.securemessaging.sm.Session;
 import com.securemessaging.sm.auth.ServiceCodeResolver;
 import com.securemessaging.sm.auth.SessionFactory;
+import com.securemessaging.sm.response.GetPingResponse;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.ws.Service;
 
 public class LoginTests extends BaseTestCase {
+
+    @Test
+    public void testPing() throws SecureMessengerException, SecureMessengerClientException{
+
+        SecureMessenger messenger = SecureMessenger.resolveViaServiceCode(serviceCode);
+        Credentials credentials = new Credentials(username, password);
+        messenger.login(credentials);
+
+        GetPingResponse pingData = messenger.ping();
+    }
 
     @Test
     public void testLoginMostDecoupled() throws SecureMessengerException, SecureMessengerClientException {

@@ -1,5 +1,6 @@
 package com.securemessaging.sm.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.securemessaging.SMRequestInterface;
 import com.securemessaging.sm.enums.SMRequestMethod;
 import org.springframework.http.HttpEntity;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpEntity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class GetSearchCampaignsRequest implements SMRequestInterface {
 
@@ -21,6 +23,11 @@ public class GetSearchCampaignsRequest implements SMRequestInterface {
     @Override
     public String getRequestRoute() {
         return "/campaigns/search?filter={filter}&page={pageNumber}&pageSize={pageSize}";
+    }
+
+    @Override
+    public boolean requestRouteHasApiPath() {
+        return false;
     }
 
     @Override
@@ -50,6 +57,7 @@ public class GetSearchCampaignsRequest implements SMRequestInterface {
     }
 
     @Override
+    @JsonIgnore
     public HttpEntity<?> getRequestAsEntity() {
         return new HttpEntity<GetSearchCampaignsRequest>(this);
     }

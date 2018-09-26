@@ -22,6 +22,11 @@ public class GetSearchMessagesRequest implements SMRequestInterface {
     }
 
     @Override
+    public boolean requestRouteHasApiPath() {
+        return false;
+    }
+
+    @Override
     public Map<String,String> getRequestParams() {
         HashMap map = new HashMap<String, String>();
         map.put("filter", "{ \"types\":[" + this.types + "], \"searchCriteria\": '" + this.searchCriteria + "'}");

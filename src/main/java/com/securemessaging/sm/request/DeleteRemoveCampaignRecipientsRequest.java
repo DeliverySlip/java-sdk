@@ -34,6 +34,11 @@ public class DeleteRemoveCampaignRecipientsRequest implements SMRequestInterface
     }
 
     @Override
+    public boolean requestRouteHasApiPath() {
+        return false;
+    }
+
+    @Override
     public Map<String, String> getRequestParams() {
         Map<String, String> map = new HashMap<String, String>();
         map.put("campaignGuid", campaignGuid);

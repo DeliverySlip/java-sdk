@@ -1,6 +1,5 @@
 package com.securemessaging.sm.request;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.securemessaging.SMRequestInterface;
@@ -13,14 +12,16 @@ import java.util.Map;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GetNewAuthenticationTokenRequest implements SMRequestInterface {
+public class PostRecallMessageRequest implements SMRequestInterface {
 
-    public int authenticationTokenMaxDays;
-
+    public String messageGuid;
+    public String recallReason;
+    public boolean singleRecall = false;
+    public boolean unshareAttachments = true;
 
     @Override
     public String getRequestRoute() {
-        return "/user/authenticationtoken?authenticationTokenMaxDays=" + authenticationTokenMaxDays;
+        return "/messages/" + messageGuid + "/recall";
     }
 
     @Override
@@ -29,18 +30,18 @@ public class GetNewAuthenticationTokenRequest implements SMRequestInterface {
     }
 
     @Override
-    public Map<String,String> getRequestParams() {
+    public Map<String, String> getRequestParams() {
         return new HashMap<String, String>();
     }
 
     @Override
     public SMRequestMethod getRequestMethod() {
-        return SMRequestMethod.GET;
+        return SMRequestMethod.POST;
     }
 
     @Override
     @JsonIgnore
     public HttpEntity<?> getRequestAsEntity() {
-        return new HttpEntity<GetNewAuthenticationTokenRequest>(this);
+        return new HttpEntity<PostRecallMessageRequest>(this);
     }
 }
